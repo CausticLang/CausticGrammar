@@ -1,0 +1,9 @@
+[patterns]
+'literal.integer' = '(?i)((?~literal.integer.base02)|(?~literal.integer.base10)|(?~literal.integer.base16))'
+'literal.integer.base02'  = '(?:0b[01](?:[_01]*[01])?)'
+'literal.integer.base10'  = '(?:\d(?:[_\d]*\d)?)'
+'literal.integer.base16'  = '(?:0x[\da-f](?:[_\da-f]*[\da-f])?)'
+
+[nodes.'literal.integer']
+type = 'flat.pattern'
+patt = 'literal.integer'
