@@ -1,0 +1,17 @@
+[patterns]
+identifier = '(?i)([a-z]\w*)'
+
+[nodes.parens_start]
+type = 'flat.string'
+string = '('
+[nodes.parens_stop]
+type = 'flat.string'
+string = ')'
+
+[nodes.identifier]
+type = 'flat.pattern'
+patt = 'identifier'
+
+[nodes.atom]
+type = 'nested.union'
+nodes = ['identifier', 'literal']

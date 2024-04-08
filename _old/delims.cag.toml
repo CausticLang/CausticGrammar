@@ -1,0 +1,28 @@
+# Symmetrical
+
+[nodes.'parens.start']
+type = 'flat.string'
+string = '('
+[nodes.'parens.stop']
+type = 'flat.string'
+string = ')'
+
+[nodes.'block.start']
+type = 'flat.string'
+string = '{'
+[nodes.'block.end']
+type = 'flat.string'
+string = '}'
+
+[nodes.'seq.start']
+type = 'flat.string'
+string = '['
+[nodes.'seq.stop']
+type = 'flat.string'
+string = ']'
+
+
+# Asymmetrical
+[nodes.'delim']
+type = 'flat.string'
+string = ','
