@@ -1,0 +1,7 @@
+[patterns]
+
+[nodes.expression]
+type = 'nested.union'
+nodes = ['identifier', 'literal']
+
+#[nodes.statements]
