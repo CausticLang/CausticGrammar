@@ -1,0 +1,9 @@
+[patterns]
+'pragma.pattern' = '(?m)(?~pragma.start)(?~pragma.val)(?~pragma.end)'
+'pragma.start' = '^\$'
+'pragma.end' = '$'
+'pragma.val' = '.*?'
+
+[nodes.pragma]
+type = 'flat.pattern'
+patt = 'pragma.pattern'
