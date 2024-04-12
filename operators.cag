@@ -1,0 +1,52 @@
+OPERATION = : [
+    OP.UPLUS OP.UMINUS OP.BITNOT
+    OP.ASSIGNSTMT OP.ASSIGNEXPR
+    OP.ADD OP.SUB OP.MULT OP.DIV OP.MOD OP.EXP
+    OP.EQ OP.NE OP.GT OP.LT OP.GE OP.LE OP.NULLISH
+    OP.LOGOR OP.LOGAND OP.LOGXOR
+    OP.BITOR OP.BITAND OP.BITXOR OP.LSHIFT OP.RSHIFT
+    OP.TERNARY
+] ;
+
+op_assigntarget = : [
+    ( type:"<identifier>" val:@IDENTIFIER )
+] ;
+
+# Unary operators
+OP.UPLUS  = type:<"uplus">  "+" target:@EXPRESSION ;
+OP.UMINUS = type:<"uminus"> "-" target:@EXPRESSION ;
+OP.BITNOT = type:<"bitnot"> "~" target:@EXPRESSION ;
+OP.LOGNOT = type:<"lognot"> "!" target:@EXPRESSION ;
+
+# Binary operators
+## Assignment
+OP.ASSIGNSTMT = dst:@OP_ASSGNTARGET "="  ! src:@EXPRESSION ;
+OP.ASSIGNEXPR = dst:@IDENTIFIER     ":=" ! src:@EXPRESSION ;
+## Arithmetic
+OP.ADD  = type:<"add">  left:@EXPRESSION "+"  ! right:@EXPRESSION ;
+OP.SUB  = type:<"sub">  left:@EXPRESSION "-"  ! right:@EXPRESSION ;
+OP.MULT = type:<"mult"> left:@EXPRESSION "*"  ! right:@EXPRESSION ;
+OP.DIV  = type:<"div">  left:@EXPRESSION "/"  ! right:@EXPRESSION ;
+OP.MOD  = type:<"mod">  left:@EXPRESSION "%"  ! right:@EXPRESSION ;
+OP.EXP  = type:<"exp">  left:@EXPRESSION "**" ! right:@EXPRESSION ;
+## Comparison
+OP.EQ = type:<"eq"> left:@EXPRESSION "==" ! right:@EXPRESSION ;
+OP.NE = type:<"ne"> left:@EXPRESSION "!=" ! right:@EXPRESSION ;
+OP.GT = type:<"gt"> left:@EXPRESSION ">"  ! right:@EXPRESSION ;
+OP.LT = type:<"lt"> left:@EXPRESSION "<"  ! right:@EXPRESSION ;
+OP.GE = type:<"ge"> left:@EXPRESSION ">=" ! right:@EXPRESSION ;
+OP.LE = type:<"le"> left:@EXPRESSION "<=" ! right:@EXPRESSION ;
+OP.NULLISH = type:<"nullish"> left:@EXPRESSION "??" ! right:@EXPRESSION ;
+## Logical
+OP.LOGOR  = type:<"logor">  left:@EXPRESSION "||" ! right:@EXPRESSION ;
+OP.LOGAND = type:<"logand"> left:@EXPRESSION "&&" ! right:@EXPRESSION ;
+OP.LOGXOR = type:<"logxor"> left:@EXPRESSION "^^" ! right:@EXPRESSION ;
+## Bitwise
+OP.BITOR  = type:<"bitor">  left:@EXPRESSION "|"  ! right:@EXPRESSION ;
+OP.BITAND = type:<"bitand"> left:@EXPRESSION "&"  ! right:@EXPRESSION ;
+OP.BITXOR = type:<"bitxor"> left:@EXPRESSION "^"  ! right:@EXPRESSION ;
+OP.LSHIFT = type:<"lshift"> left:@EXPRESSION "<<" ! right:@EXPRESSION ;
+OP.RSHIFT = type:<"rshift"> left:@EXPRESSION ">>" ! right:@EXPRESSION ;
+
+# Ternary operator
+OP.TERNARY = type:<"ternary"> cmp:@EXPRESSION "?" ! true:@EXPRESSION ":" false:@EXPRESSION ;
