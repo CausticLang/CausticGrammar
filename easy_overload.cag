@@ -1,5 +1,7 @@
 # Easy overloads for individual characters or sequences #
 
+eo.comment_singleline.start = "//" ;
+eo.comment_multiline = :1/\/\*(.*?)\*\//s ;
 
 # Operators
 ## Unary
