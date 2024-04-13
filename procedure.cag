@@ -1,0 +1,24 @@
+# De(clar/fin)ing
+PROC.DEFN.STMT = "proc " ! ^:{ type:@ATOM.IDENTIFIER } "(" ! args:@proc_args_defn ! ")" body:@BLOCK ;
+PROC.DEFN.EXPR = "proc" "(" ! args:@proc_args_defn ! ")" body:@BLOCK ;
+
+proc_args_defn = : ( ^: - ( :@proc_arg_defn "," ) ^: -1 ( :@proc_arg_defn ) ) ;
+proc_arg_defn =
+    name:@ATOM.IDENTIFIER
+    type: [ ( ":" :@ATOM.IDENTIFIER ) <> ]
+    default: [ ( "=" :@EXPRESSION ) <> ]
+;
+
+# Invoking
+proc_arg = kw:<> unpack: [ ( :<1> "*" ) :<> ] val:@EXPRESSION ;
+proc_kwarg = kw:<1> ^: [
+    (unpack:<> name:@ATOM.IDENTIFIER val:@EXPRESSION)
+    (unpack:<1> "**" ! val:@EXPRESSION)
+] ;
+PROC.INVOKE = target:@EXPRESSION "(" ! args: (
+    ^: - [
+        ( ^:@proc_arg "," )
+        ( ^:@proc_kwarg "," )
+    ]
+    ^: -1 [ @proc_arg @proc_kwarg ]
+) ")" ;

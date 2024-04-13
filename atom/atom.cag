@@ -1,0 +1,7 @@
+$include ./identifier.cag
+$include ./literal.cag
+
+ATOM = : [
+    ( type:<"literal"> val:@ATOM.LTRL )
+    ( type:<"identifier"> val:@ATOM.IDENTIFIER )
+] ;

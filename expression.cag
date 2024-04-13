@@ -1,0 +1,4 @@
+EXPRESSION = [
+    ( type:<"atom"> val:@ATOM )
+    ( type:<"operator">  val:@OPERATION )
+] ;

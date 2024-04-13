@@ -1,19 +1,19 @@
 OPERATION = : [
-    OP.UPLUS OP.UMINUS OP.BITNOT
-    OP.ASSIGNSTMT OP.ASSIGNEXPR
-    OP.ADD OP.SUB OP.MULT OP.DIV OP.MOD OP.EXP
-    OP.EQ OP.NE OP.GT OP.LT OP.GE OP.LE OP.NULLISH
-    OP.LOGOR OP.LOGAND OP.LOGXOR
-    OP.BITOR OP.BITAND OP.BITXOR OP.LSHIFT OP.RSHIFT
-    OP.TERNARY
+    @OP.UPLUS @OP.UMINUS @OP.BITNOT
+    @OP.ASSIGNSTMT @OP.ASSIGNEXPR
+    @OP.ADD @OP.SUB @OP.MULT @OP.DIV @OP.MOD @OP.EXP
+    @OP.EQ @OP.NE @OP.GT @OP.LT @OP.GE @OP.LE @OP.NULLISH
+    @OP.LOGOR @OP.LOGAND @OP.LOGXOR
+    @OP.BITOR @OP.BITAND @OP.BITXOR @OP.LSHIFT @OP.RSHIFT
+    @OP.TERNARY
 ] ;
 
 op_assigntarget = : [
-    ( type:"<identifier>" val:@IDENTIFIER )
+    ( type:"<identifier>" val:@ATOM.IDENTIFIER )
 ] ;
 
 # Unary operators
-OP.UPLUS  = type:<"uplus">  "+" target:@EXPRESSION ;
+OP.UPLUS  = type:<"uplus">  @op.eo.uplus target:@EXPRESSION ;
 OP.UMINUS = type:<"uminus"> "-" target:@EXPRESSION ;
 OP.BITNOT = type:<"bitnot"> "~" target:@EXPRESSION ;
 OP.LOGNOT = type:<"lognot"> "!" target:@EXPRESSION ;
@@ -30,7 +30,7 @@ OP.DIV  = type:<"div">  left:@EXPRESSION "/"  ! right:@EXPRESSION ;
 OP.MOD  = type:<"mod">  left:@EXPRESSION "%"  ! right:@EXPRESSION ;
 OP.EXP  = type:<"exp">  left:@EXPRESSION "**" ! right:@EXPRESSION ;
 ## Comparison
-OP.EQ = type:<"eq"> left:@EXPRESSION "==" ! right:@EXPRESSION ;
+OP.EQ = type:<"eq"> left:@EXPRESSION @eo.op.eq ! right:@EXPRESSION ;
 OP.NE = type:<"ne"> left:@EXPRESSION "!=" ! right:@EXPRESSION ;
 OP.GT = type:<"gt"> left:@EXPRESSION ">"  ! right:@EXPRESSION ;
 OP.LT = type:<"lt"> left:@EXPRESSION "<"  ! right:@EXPRESSION ;

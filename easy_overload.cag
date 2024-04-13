@@ -1,0 +1,6 @@
+# Easy overloads for individual characters or sequences #
+
+
+# Operators
+## Unary
+eo.op.upus = "+" ;

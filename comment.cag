@@ -1,0 +1,4 @@
+COMMENT = : [ @comment_singleline @comment_multiline ] ;
+
+comment_singleline = "//" :0/.*?$/m ;
+comment_multiline  = "/*" ! :0/[^*]|(?:\*[^\/]|$)/s "*/" ;
