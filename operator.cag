@@ -13,40 +13,40 @@ op_assigntarget = : [
 ] ;
 
 # Unary operators
-OP.UPLUS  = type:<"uplus">  @op.eo.uplus target:@EXPRESSION ;
-OP.UMINUS = type:<"uminus"> "-" target:@EXPRESSION ;
-OP.BITNOT = type:<"bitnot"> "~" target:@EXPRESSION ;
-OP.LOGNOT = type:<"lognot"> "!" target:@EXPRESSION ;
+OP.UPLUS  = type:<"uplus">  @op.eo.uplus  target:@EXPRESSION ;
+OP.UMINUS = type:<"uminus"> @eo.op.uminus target:@EXPRESSION ;
+OP.BITNOT = type:<"bitnot"> @eo.op.bitnot target:@EXPRESSION ;
+OP.LOGNOT = type:<"lognot"> @eo.op.lognot target:@EXPRESSION ;
 
 # Binary operators
 ## Assignment
-OP.ASSIGNSTMT = dst:@OP_ASSGNTARGET "="  ! src:@EXPRESSION ;
-OP.ASSIGNEXPR = dst:@IDENTIFIER     ":=" ! src:@EXPRESSION ;
+OP.ASSIGNSTMT = dst:@OP_ASSGNTARGET @eo.op.assign     ! src:@EXPRESSION ;
+OP.ASSIGNEXPR = dst:@IDENTIFIER     @eo.op.assignexpr ! src:@EXPRESSION ;
 ## Arithmetic
-OP.ADD  = type:<"add">  left:@EXPRESSION "+"  ! right:@EXPRESSION ;
-OP.SUB  = type:<"sub">  left:@EXPRESSION "-"  ! right:@EXPRESSION ;
-OP.MULT = type:<"mult"> left:@EXPRESSION "*"  ! right:@EXPRESSION ;
-OP.DIV  = type:<"div">  left:@EXPRESSION "/"  ! right:@EXPRESSION ;
-OP.MOD  = type:<"mod">  left:@EXPRESSION "%"  ! right:@EXPRESSION ;
-OP.EXP  = type:<"exp">  left:@EXPRESSION "**" ! right:@EXPRESSION ;
+OP.ADD  = type:<"add">  left:@EXPRESSION @eo.op.add  ! right:@EXPRESSION ;
+OP.SUB  = type:<"sub">  left:@EXPRESSION @eo.op.sub  ! right:@EXPRESSION ;
+OP.MULT = type:<"mult"> left:@EXPRESSION @eo.op.mult ! right:@EXPRESSION ;
+OP.DIV  = type:<"div">  left:@EXPRESSION @eo.op.div  ! right:@EXPRESSION ;
+OP.MOD  = type:<"mod">  left:@EXPRESSION @eo.op.mod  ! right:@EXPRESSION ;
+OP.EXP  = type:<"exp">  left:@EXPRESSION @eo.op.exp  ! right:@EXPRESSION ;
 ## Comparison
-OP.EQ = type:<"eq"> left:@EXPRESSION @eo.op.eq ! right:@EXPRESSION ;
-OP.NE = type:<"ne"> left:@EXPRESSION "!=" ! right:@EXPRESSION ;
-OP.GT = type:<"gt"> left:@EXPRESSION ">"  ! right:@EXPRESSION ;
-OP.LT = type:<"lt"> left:@EXPRESSION "<"  ! right:@EXPRESSION ;
-OP.GE = type:<"ge"> left:@EXPRESSION ">=" ! right:@EXPRESSION ;
-OP.LE = type:<"le"> left:@EXPRESSION "<=" ! right:@EXPRESSION ;
-OP.NULLISH = type:<"nullish"> left:@EXPRESSION "??" ! right:@EXPRESSION ;
+OP.EQ      = type:<"eq">      left:@EXPRESSION @eo.op.eq      ! right:@EXPRESSION ;
+OP.NE      = type:<"ne">      left:@EXPRESSION @eo.op.ne      ! right:@EXPRESSION ;
+OP.GT      = type:<"gt">      left:@EXPRESSION @eo.op.gt      ! right:@EXPRESSION ;
+OP.LT      = type:<"lt">      left:@EXPRESSION @eo.op.lt      ! right:@EXPRESSION ;
+OP.GE      = type:<"ge">      left:@EXPRESSION @eo.op.ge      ! right:@EXPRESSION ;
+OP.LE      = type:<"le">      left:@EXPRESSION @eo.op.le      ! right:@EXPRESSION ;
+OP.NULLISH = type:<"nullish"> left:@EXPRESSION @eo.op.nullish ! right:@EXPRESSION ;
 ## Logical
-OP.LOGOR  = type:<"logor">  left:@EXPRESSION "||" ! right:@EXPRESSION ;
-OP.LOGAND = type:<"logand"> left:@EXPRESSION "&&" ! right:@EXPRESSION ;
-OP.LOGXOR = type:<"logxor"> left:@EXPRESSION "^^" ! right:@EXPRESSION ;
+OP.LOGOR  = type:<"logor">  left:@EXPRESSION @eo.op.logor  ! right:@EXPRESSION ;
+OP.LOGAND = type:<"logand"> left:@EXPRESSION @eo.op.logand ! right:@EXPRESSION ;
+OP.LOGXOR = type:<"logxor"> left:@EXPRESSION @eo.op.logxor ! right:@EXPRESSION ;
 ## Bitwise
-OP.BITOR  = type:<"bitor">  left:@EXPRESSION "|"  ! right:@EXPRESSION ;
-OP.BITAND = type:<"bitand"> left:@EXPRESSION "&"  ! right:@EXPRESSION ;
-OP.BITXOR = type:<"bitxor"> left:@EXPRESSION "^"  ! right:@EXPRESSION ;
-OP.LSHIFT = type:<"lshift"> left:@EXPRESSION "<<" ! right:@EXPRESSION ;
-OP.RSHIFT = type:<"rshift"> left:@EXPRESSION ">>" ! right:@EXPRESSION ;
+OP.BITOR  = type:<"bitor">  left:@EXPRESSION @eo.op.bitor  ! right:@EXPRESSION ;
+OP.BITAND = type:<"bitand"> left:@EXPRESSION @eo.op.bitand ! right:@EXPRESSION ;
+OP.BITXOR = type:<"bitxor"> left:@EXPRESSION @eo.op.bitxor ! right:@EXPRESSION ;
+OP.LSHIFT = type:<"lshift"> left:@EXPRESSION @eo.op.lshift ! right:@EXPRESSION ;
+OP.RSHIFT = type:<"rshift"> left:@EXPRESSION @eo.op.rshift ! right:@EXPRESSION ;
 
 # Ternary operator
-OP.TERNARY = type:<"ternary"> cmp:@EXPRESSION "?" ! true:@EXPRESSION ":" false:@EXPRESSION ;
+OP.TERNARY = type:<"ternary"> cmp:@EXPRESSION @eo.op.ternary_cmp ! true:@EXPRESSION @eo.op.ternary_sep ! false:@EXPRESSION ;
