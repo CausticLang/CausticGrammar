@@ -20,8 +20,8 @@ OP.LOGNOT = type:<"lognot"> @eo.op.lognot target:@EXPRESSION ;
 
 # Binary operators
 ## Assignment
-OP.ASSIGNSTMT = dst:@OP_ASSGNTARGET @eo.op.assign     ! src:@EXPRESSION ;
-OP.ASSIGNEXPR = dst:@IDENTIFIER     @eo.op.assignexpr ! src:@EXPRESSION ;
+OP.ASSIGNSTMT = type:<"assignstmt"> dst:@OP_ASSGNTARGET @eo.op.assign     ! src:@EXPRESSION ;
+OP.ASSIGNEXPR = type:<"assignexpr"> dst:@IDENTIFIER     @eo.op.assignexpr ! src:@EXPRESSION ;
 ## Arithmetic
 OP.ADD  = type:<"add">  left:@EXPRESSION @eo.op.add  ! right:@EXPRESSION ;
 OP.SUB  = type:<"sub">  left:@EXPRESSION @eo.op.sub  ! right:@EXPRESSION ;
