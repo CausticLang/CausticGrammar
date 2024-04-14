@@ -1,0 +1,6 @@
+# Offers a way to more easily overload builtin patterns
+# by only replacing characters and patterns, instead of grammar order
+
+$include comment.cag
+$include operator.cag
+$include procedure.cag

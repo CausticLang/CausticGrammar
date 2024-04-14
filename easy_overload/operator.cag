@@ -1,0 +1,38 @@
+# Unary - operations on one parameter 
+eo.op.uplus  = "+" ;
+eo.op.uminus = "-" ;
+eo.op.bitnot = "~" ;
+eo.op.lognot = "!" ;
+
+# Binary - operations on two parameters
+## Assignment
+eo.op.assign     = "="  ; # assigns to a name, as a statement
+eo.op.assignexpr = ":=" ; # assigns to a name and returns the value
+## Arithmetic
+eo.op.add  = "+"  ;
+eo.op.sub  = "-"  ;
+eo.op.mult = "*"  ;
+eo.op.div  = "/"  ;
+eo.op.mod  = "%"  ;
+eo.op.exp  = "**" ;
+## Comparison
+eo.op.eq =      "==" ;
+eo.op.ne =      "!=" ;
+eo.op.gt =      ">"  ;
+eo.op.lt =      "<"  ;
+eo.op.ge =      ">=" ;
+eo.op.le =      "<=" ;
+eo.op.nullish = "??" ;
+## Logical
+eo.op.logor  = "||" ;
+eo.op.logand = "&&" ;
+eo.op.logxor = "^^" ;
+## Bitwise
+eo.op.bitor  = "|"  ;
+eo.op.bitand = "&"  ;
+eo.op.bitxor = "^"  ;
+eo.op.lshift = "<<" ;
+eo.op.rshift = ">>" ;
+# Ternary
+eo.op.ternary_cmp = "?" ;
+eo.op.ternary_sep = ":" ;

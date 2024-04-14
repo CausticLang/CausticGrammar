@@ -1,0 +1,14 @@
+# Used when declaring a procedure
+eo.proc.stmtkw       = "proc " ;
+eo.proc.exprkw       = "proc"  ;
+
+# Opens and closes procedure arg declaration and invokation
+eo.proc.arg.left     = "(" ;
+eo.proc.arg.right    = ")" ;
+
+# Separates:
+eo.proc.arg.sep      = ","  ; # arguments
+eo.proc.arg.typesep  = ":"  ; # types from arguments
+eo.proc.arg.default  = "="  ; # defaults from arguments
+eo.proc.arg.unpack   = "*"  ; # unpack-arguments
+eo.proc.arg.kwunpack = "**" ; # unpack-keyword-arguments
