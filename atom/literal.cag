@@ -1,6 +1,6 @@
 ATOM.LTRL = : [
-    @ATOM.LTRL.INTEGER
-    @ATOM.LTRL.STRING
+    ( type:<"int"> ^:@ATOM.LTRL.INTEGER )
+    ( type:<"str"> ^:@ATOM.LTRL.STRING )
 ] ;
 
 # Number
