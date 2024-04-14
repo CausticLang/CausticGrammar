@@ -1,7 +1,19 @@
 # Easy overloads for individual characters or sequences #
 
+# Comments
 eo.comment_singleline.start = "//" ;
 eo.comment_multiline = :1/\/\*(.*?)\*\//s ;
+
+# Procedures
+eo.proc.stmtkw       = "proc "
+eo.proc.exprkw       = "proc"
+eo.proc.arg.left     = "(" ;
+eo.proc.arg.right    = ")" ;
+eo.proc.arg.sep      = "," ;
+eo.proc.arg.typesep  = ":" ;
+eo.proc.arg.default  = "=" ;
+eo.proc.arg.unpack   = "*" ;
+eo.proc.arg.kwunpack = "**" ;
 
 # Operators
 ## Unary

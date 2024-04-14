@@ -1,24 +1,24 @@
 # De(clar/fin)ing
-PROC.DEFN.STMT = "proc " ! ^:{ type:@ATOM.IDENTIFIER } "(" ! args:@proc_args_defn ! ")" body:@BLOCK ;
-PROC.DEFN.EXPR = "proc" "(" ! args:@proc_args_defn ! ")" body:@BLOCK ;
+PROC.DEFN.STMT = @eo.proc.stmtkw ! ^:{ type:@ATOM.IDENTIFIER } @eo.proc.argleft ! args:@proc_args_defn ! @eo.proc.arg.right ! body:@BLOCK ;
+PROC.DEFN.EXPR = @eo.proc.exprkw @eo.proc.arg.left ! args:@proc_args_defn ! @eo.proc.arg.right body:@BLOCK ;
 
-proc_args_defn = : ( ^: - ( :@proc_arg_defn "," ) ^: -1 ( :@proc_arg_defn ) ) ;
+proc_args_defn = : ( ^: - ( :@proc_arg_defn @eo.proc.argsep ) ^: -1 ( :@proc_arg_defn ) ) ;
 proc_arg_defn =
     name:@ATOM.IDENTIFIER
-    type: [ ( ":" :@ATOM.IDENTIFIER ) <> ]
-    default: [ ( "=" :@EXPRESSION ) <> ]
+    type: [ ( @eo.proc.arg.typesep :@ATOM.IDENTIFIER ) <> ]
+    default: [ ( @eo.proc.arg.default :@EXPRESSION ) <> ]
 ;
 
 # Invoking
-proc_arg = kw:<> unpack: [ ( :<1> "*" ) :<> ] val:@EXPRESSION ;
+proc_arg = kw:<> unpack: [ ( :<1> @eo.proc.arg.unpack ) :<> ] val:@EXPRESSION ;
 proc_kwarg = kw:<1> ^: [
     (unpack:<> name:@ATOM.IDENTIFIER val:@EXPRESSION)
-    (unpack:<1> "**" ! val:@EXPRESSION)
+    (unpack:<1> @eo.proc.arg.kwunpack ! val:@EXPRESSION)
 ] ;
-PROC.INVOKE = target:@EXPRESSION "(" ! args: (
+PROC.INVOKE = target:@EXPRESSION @eo.proc.arg.left ! args: (
     ^: - [
-        ( ^:@proc_arg "," )
-        ( ^:@proc_kwarg "," )
+        ( ^:@proc_arg @eo.proc.arg.sep )
+        ( ^:@proc_kwarg @eo.proc.arg.sep )
     ]
     ^: -1 [ @proc_arg @proc_kwarg ]
-) ")" ;
+) @eo.proc.arg.right ;
