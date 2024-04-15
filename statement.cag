@@ -1,0 +1,3 @@
+STATEMENT = : [
+    ( type:<"procdecl"> val:@PROC.DEFN.STMT )
+] ;
