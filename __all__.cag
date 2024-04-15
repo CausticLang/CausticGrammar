@@ -1,5 +1,9 @@
+$include block.cag
+$include comment.cag
+$include statement.cag
+$include expression.cag
+$include procedure.cag
 $include atom/atom.cag
 $include operator.cag
-$include procedure.cag
-$include expression.cag
-$include comment.cag
+
+$include easy_overload/easy_overload.cag
