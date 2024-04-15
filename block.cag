@@ -1,0 +1,13 @@
+BLOCK = [
+    ( @BLOCK.SINGLE )
+    @BLOCK.MULTI
+] ;
+BLOCK.SINGLE = [
+    ( type:<"expr"> val:@EXPRESSION )
+    ( type:<"stmt"> val:@STATEMENT )
+] ! @eo.block.endl ;
+BLOCK.MULTI =
+    @eo.block.left !
+    : - @BLOCK ;
+    @eo.block.right
+;
