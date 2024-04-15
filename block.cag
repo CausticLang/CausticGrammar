@@ -1,5 +1,5 @@
 BLOCK = [
-    ( @BLOCK.SINGLE )
+    @BLOCK.SINGLE
     @BLOCK.MULTI
 ] ;
 BLOCK.SINGLE = [
@@ -8,6 +8,6 @@ BLOCK.SINGLE = [
 ] ! @eo.block.endl ;
 BLOCK.MULTI =
     @eo.block.left !
-    : - @BLOCK ;
+    : - @BLOCK
     @eo.block.right
 ;

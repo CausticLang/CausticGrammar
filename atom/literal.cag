@@ -1,6 +1,6 @@
 ATOM.LTRL = : [
     ( type:<"int"> ^:@ATOM.LTRL.INTEGER )
-    ( type:<"str"> ^:@ATOM.LTRL.STRING )
+    ( type:<"str"> vals:@ATOM.LTRL.STRING )
 ] ;
 
 # Number
@@ -21,9 +21,9 @@ ATOM.LTRL.STRING.PARTS = : [
     ( "'" ! :0/(?:[^\\'\n]|(?:\\.))/ "'" )
     ( '"' ! :0/(?:[^\\"\n]|(?:\\.))/ '"' )
 ] ;
-ATOM.LTRL.STRING = type:<"string"> - [
+ATOM.LTRL.STRING = 1- [
     @ATOM.LTRL.STRING_STR
     @ATOM.LTRL.STRING_RAW
 ] ;
 ATOM.LTRL.STRING_STR = raw:<> val:@ATOM.LTRL.STRING.PARTS ;
-ATOM.LTRL.STRING_RAW= raw:<1> val:{ "r" :@ATOM.LTRL.STRING.PARTS } ;
+ATOM.LTRL.STRING_RAW= raw:<1> val:{ "r" ! :@ATOM.LTRL.STRING.PARTS } ;

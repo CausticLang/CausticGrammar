@@ -13,14 +13,14 @@ op_assigntarget = : [
 ] ;
 
 # Unary operators
-OP.UPLUS  = type:<"uplus">  @op.eo.uplus  target:@EXPRESSION ;
+OP.UPLUS  = type:<"uplus">  @eo.op.uplus  target:@EXPRESSION ;
 OP.UMINUS = type:<"uminus"> @eo.op.uminus target:@EXPRESSION ;
 OP.BITNOT = type:<"bitnot"> @eo.op.bitnot target:@EXPRESSION ;
 OP.LOGNOT = type:<"lognot"> @eo.op.lognot target:@EXPRESSION ;
 
 # Binary operators
 ## Assignment
-OP.ASSIGNSTMT = type:<"assignstmt"> dst:@OP_ASSGNTARGET  @eo.op.assign     ! src:@EXPRESSION ;
+OP.ASSIGNSTMT = type:<"assignstmt"> dst:@op_assigntarget @eo.op.assign     ! src:@EXPRESSION ;
 OP.ASSIGNEXPR = type:<"assignexpr"> dst:@ATOM.IDENTIFIER @eo.op.assignexpr ! src:@EXPRESSION ;
 ## Arithmetic
 OP.ADD  = type:<"add">  left:@EXPRESSION @eo.op.add  ! right:@EXPRESSION ;
