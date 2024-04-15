@@ -1,6 +1,6 @@
 # De(clar/fin)ing
-PROC.DEFN.STMT = @eo.proc.stmtkw ! ^:{ type:@ATOM.IDENTIFIER } @eo.proc.argleft ! args:@proc_args_defn ! @eo.proc.arg.right ! body:@BLOCK ;
-PROC.DEFN.EXPR = @eo.proc.exprkw @eo.proc.arg.left ! args:@proc_args_defn ! @eo.proc.arg.right body:@BLOCK ;
+PROC.DEFN.STMT = @eo.proc.stmtkw ! type:@ATOM.IDENTIFIER " " name:@ATOM.IDENTIFIER @eo.proc.argleft ! args:@proc_args_defn ! @eo.proc.arg.right ! body:@BLOCK ;
+PROC.DEFN.EXPR = @eo.proc.exprkw @eo.proc.arg.left ! args:@proc_args_defn ! @eo.proc.arg.right body:@BLOCK ; # tofix: add type
 
 proc_args_defn = : ( ^: - ( :@proc_arg_defn @eo.proc.argsep ) ^: -1 ( :@proc_arg_defn ) ) ;
 proc_arg_defn =
