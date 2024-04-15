@@ -1,4 +1,6 @@
-EXPRESSION = [
-    ( type:<"atom"> val:@ATOM )
-    ( type:<"operator">  val:@OPERATION )
+EXPRESSION = : [
+    ( type:<"atom">     val:@ATOM )
+    ( type:<"operator"> val:@OPERATION )
+    ( type:<"procdecl"> val:@PROC.DEFN.EXPR )
+    ( type:<"invoke">   val:@PROC.INVOKE )
 ] ;
