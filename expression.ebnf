@@ -1,8 +1,18 @@
 expression = ternary ;
 
-ternary = (type:`ternary` cmp:arith TERNARY_CMP ~
-           true:arith ~ TERNARY_SEP ~ false:arith)
-        | @:arith ;
+ternary = (type:`ternary` cmp:comparison TERNARY_CMP ~
+           true:comparison ~ TERNARY_SEP ~ false:comparison)
+        | @:comparison ;
+
+comparison = (left:comparison (
+               (type:`eq` CMP_EQ ~)
+             | (type:`ne` CMP_NE ~)
+             | (type:`ge` CMP_GE ~)
+             | (type:`le` CMP_LE ~)
+             | (type:`gt` CMP_GT ~)
+             | (type:`lt` CMP_LT ~)
+             | (type:`nullish` NULLISH ~)
+             ) right:arith) | @:arith ;
 
 arith = (left:arith (
           (type:`add` OP_ADD ~)

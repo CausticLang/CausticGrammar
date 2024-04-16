@@ -11,10 +11,18 @@ INDEX_LEFT = '[' ;  INDEX_RIGHT = ']' ;
 
 UPLUS = '+' ;  UMINUS = '-' ;  UBITNOT = '~'  ; ULOGNOT = '!' ;
 
-OP_EXP = '**' ;
-OP_MOD =  '%' ;
-OP_DIV =  '/' ;
-OP_MULT = '*' ;
-OP_MMUL = '@' ;
-OP_ADD =  '+' ;
-OP_SUB =  '-' ;
+OP_EXP  = '**' ;
+OP_MOD  = '%'  ;
+OP_DIV  = '/'  ;
+OP_MULT = '*'  ;
+OP_MMUL = '@'  ;
+OP_ADD  = '+'  ;
+OP_SUB  = '-'  ;
+
+CMP_EQ  = '==' ;
+CMP_NE  = '!=' ;
+CMP_GT  = '>'  ;
+CMP_LT  = '<'  ;
+CMP_GE  = '>=' ;
+CMP_LE  = '<=' ;
+NULLISH = '??' ;
