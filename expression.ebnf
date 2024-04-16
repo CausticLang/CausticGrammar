@@ -1,0 +1,58 @@
+expression = ternary ;
+
+ternary = (type:`ternary` cmp:arith TERNARY_CMP ~
+           true:arith ~ TERNARY_SEP ~ false:arith)
+        | @:arith ;
+
+arith = (left:arith (
+          (type:`add` OP_ADD ~)
+        | (type:`sub` OP_SUB ~)
+        ) right:term) | term ;
+
+term = (left:term (
+         (type:`exp`  OP_EXP ~)
+       | (type:`mod`  OP_MOD ~)
+       | (type:`div`  OP_DIV ~)
+       | (type:`mult` OP_MULT ~)
+       | (type:`mmul` OP_MMUL ~)
+       ) right:unary) | unary ;
+
+unary = @:invoke | ( unaries:unaries target:invoke );
+unaries = { (UPLUS ~ @+:`plus`) | (UMINUS ~ @+:`minus`)
+          | (UBITNOT ~ @+:`bnot`) | (ULOGNOT ~ @+:`lnot`) }* ;
+
+invoke = (type:`invoke` target:sub INVOKE_LEFT ~ args:invokation ~ INVOKE_RIGHT) | @:sub ;
+invokation = { @+:expression INVOKE_SEP }* [ @:expression ] ;
+
+sub = (type:`attr` left:bind ATTR_ACCESS ~ right:IDENTIFIER)
+    | (type:`index` left:bind INDEX_LEFT ~ right:expression ~ INDEX_RIGHT)
+    | @:bind ;
+
+bind = (BIND_LEFT ~ @:expression ~ BIND_RIGHT) | @:atom ;
+
+atom = (type:`identifier` val:IDENTIFIER) ;
+
+
+
+
+
+
+#invoking = @expression invokations:{ invokation }* ;
+#invokation = INVOKE_LEFT ~ { @+:expression INVOKE_SEP ~ }* [ @+:expression ] INVOKE_RIGHT ;
+
+#arith = >term ariths:expression ;
+#ariths = { ((OP_ADD type:`add`) | (OP_SUB type:`sub`)) ~ right:expression }* ;
+
+#term = >arith terms:terms ;
+#terms = { ((OP_EXP type:`exp`) | (OP_MOD type:`mod`) | (OP_DIV type:`div`) | (OP_MULT type:`mult`) | (OP_MMUL type:`mmul`)) ~ right:expression }* ;
+
+#unary = unaries:unaries >term ;
+#unaries = { (UPLUS @+:`plus`) | (UMINUS @+:`minus`) | (UBITNOT @+:`bitnot`) | (ULOGNOT @:`bitor`) ~ }* ;
+
+#getting = >unary getters:getters ;
+#getters = { (type:`attr` ATTR_ACCESS ~ IDENTIFIER) | (type:`index` INDEX_LEFT ~ >expression ~ INDEX_RIGHT) }* ;
+
+#ternary = >getting ternaries:ternaries ;
+#ternaries = { TERNARY_CMP true:expression ~ TERNARY_SEP ~ false:expression }* ;
+
+#binding = ( BIND_LEFT ~ @:expression BIND_RIGHT ) | @:ternary ;
