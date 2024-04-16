@@ -1,2 +1,6 @@
 @name
 IDENTIFIER = /(?!\d)\w+/ ;
+
+DOTTED_NAME_SEP = '.' ;
+
+DOTTED_NAME = @+:IDENTIFIER { DOTTED_NAME_SEP @+:IDENTIFIER }* ;
