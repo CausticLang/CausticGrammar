@@ -1,3 +1,0 @@
-COMMENT = : [ @comment_singleline @comment_multiline ] ;
-
-comment_singleline = @comment_singleline.start :0/.*?$/m ;

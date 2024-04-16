@@ -1,5 +1,0 @@
-[patterns]
-
-[nodes.literal]
-type = 'nested.union'
-nodes = ['literal.integer']

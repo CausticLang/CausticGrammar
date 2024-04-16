@@ -1,5 +1,0 @@
-# Begins a singleline comment
-eo.comment_singleline.start = "//" ;
-
-# Matches a multiline comment
-eo.comment_multiline = :1/\/\*(.*?)\*\//s ;

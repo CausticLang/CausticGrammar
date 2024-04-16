@@ -1,7 +1,0 @@
-# Supplies both easy overloads and grammar replacements for
-# Python-like grammar
-# Note: these are meant to be used *on top* of the default grammar
-
-$include comment.cag
-$include operator.cag
-$include procedure.cag
