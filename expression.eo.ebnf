@@ -26,3 +26,5 @@ CMP_LT  = '<'  ;
 CMP_GE  = '>=' ;
 CMP_LE  = '<=' ;
 NULLISH = '??' ;
+
+ASSIGN_EXPR = ':=' ;

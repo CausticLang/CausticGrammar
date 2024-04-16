@@ -1,4 +1,7 @@
-expression = ternary ;
+expression = assignexpr ;
+
+assignexpr = (type:`assignexpr` left:IDENTIFIER ASSIGN_EXPR ~ right:expression)
+           | @:ternary ;
 
 ternary = (type:`ternary` cmp:comparison TERNARY_CMP ~
            true:comparison ~ TERNARY_SEP ~ false:comparison)
