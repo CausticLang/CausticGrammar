@@ -1,0 +1,54 @@
+literal: integer | Char | bytes | string ;
+
+integer: Integer_B02 | Integer_B16 | Integer_B10 ;
+
+@Integer
+Integer_B02: "0b" val=BASE02INT {base:2} ;
+@Integer
+Integer_B10: val=BASE02INT ;
+@Integer
+Integer_B16: "0x" val=BASE16INT {base:16} ;
+
+
+// Float/Double/etc. types: TBA
+
+
+Char: '`' val=CHAR_INNER '`' ;
+
+
+bytes: 'b' (Bytes_ML_S | Bytes_ML_D | Bytes_SL_S | Bytes_SL_D) ;
+
+@Bytes
+Bytes_ML_S: raw?='r' "'''" val=ML_SQ_STRING_INNER "'''" ;
+@Bytes
+Bytes_ML_D: raw?='r' '"""' val=ML_DQ_STRING_INNER '"""' ;
+@Bytes
+Bytes_SL_S: raw?='r' "'" val=SL_SQ_STRING_INNER "'" ;
+@Bytes
+Bytes_SL_D: raw?='r' '"' val=SL_DQ_STRING_INNER '"' ;
+
+
+string: String_ML_S | String_ML_D | String_SL_S | String_SL_D ;
+
+@String
+String_ML_S: raw?='r' "'''" val=ML_SQ_STRING_INNER "'''" ;
+@String
+String_ML_D: raw?='r' '"""' val=ML_DQ_STRING_INNER '"""' ;
+@String
+String_SL_S: raw?='r' "'" val=SL_SQ_STRING_INNER "'" ;
+@String
+String_SL_D: raw?='r' '"' val=SL_DQ_STRING_INNER '"' ;
+
+
+terminals
+
+BASE02INT: /[01][01_]*/ ;
+BASE10INT: /\d[\d_]*/ ;
+BASE16INT: /[\da-fA-F][\da-fA-F_]*/ ;
+
+CHAR_INNER: /[^`\n]|(?:\\.)/ ;
+
+SL_SQ_STRING_INNER: /(?:(?:\\')|[^'\n])*/ ;
+SL_DQ_STRING_INNER: /(?:(?:\\")|[^"\n])*/ ;
+ML_SQ_STRING_INNER: /(?:(?:''[^'])|(?:\\''')|[^'])*/ ;
+ML_DQ_STRING_INNER: /(?:(?:""[^"])|(?:\\""")|[^"])*/ ;

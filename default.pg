@@ -1,0 +1,13 @@
+import './expressions/atoms/identifier.pg';
+import './expressions/atoms/literals.pg';
+
+@Block
+Block: body=Line* ;
+
+@Line
+Line: content=(identifier.DottedIdentifier | literals.literal) LINE_END ;
+
+
+terminals
+
+LINE_END: ';' ;

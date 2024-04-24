@@ -1,0 +1,9 @@
+Identifier: name=IDENTIFIER ;
+
+DottedIdentifier: names=IDENTIFIER+[DOT] ;
+
+
+terminals
+
+IDENTIFIER: /[a-zA-Z_]\w*/ ;
+DOT: "." ;
