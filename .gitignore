@@ -1,4 +1,10 @@
+# Python bytecode cache
+__pycache__/
 
-# Caches
-__pycache__/ # Python bytecode cache
-*.pgt # cached ParGlare tables
+# Precompiled ParGlare tables
+*.pgt
+
+# Python package
+build/
+dist/
+*.egg-info/
