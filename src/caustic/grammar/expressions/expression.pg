@@ -4,11 +4,12 @@ import './atoms/literals.pg' ;
 import './operator.pg' ;
 
 Invoke: EMPTY ; // OVERRIDE
-//ProcedureExpr: EMPTY ; // OVERRIDE
+ProcedureExpr: EMPTY ; // OVERRIDE
 
 atom: literals.literal | identifier.DottedIdentifier ;
 
 expression: binding           {99, left}
+          | ProcedureExpr     {25, left}
           | Invoke            {20, left}
           | operator.operator {15, left}
           | atom              {10, left} ;

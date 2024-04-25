@@ -4,18 +4,25 @@ import './expressions/expression.pg' ;
 import './procedure.pg' ;
 
 
+Start: Block* ;
+
 @Block
-Block: body=Line* ;
+Block: body=Line | BLOCK_START body=Line* BLOCK_END ;
 
 @Line
-Line: content=(expression.expression) LINE_END ;
+Line: content=(expression.expression | Block) LINE_END ;
 
 // Overrides
 expression.Invoke: procedure.Invoke ;
+expression.ProcedureExpr: procedure.ProcedureExpr ;
 procedure.Block: Block ;
 procedure.expression: expression.expression ;
 procedure.Identifier: expression.identifier.Identifier ;
+procedure.DottedIdentifier: expression.identifier.DottedIdentifier ;
 
 terminals
+
+BLOCK_START: '{' ;
+BLOCK_END: '}' ;
 
 LINE_END: ';' ;

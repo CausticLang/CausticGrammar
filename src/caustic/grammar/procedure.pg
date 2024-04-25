@@ -1,5 +1,7 @@
+Block: EMPTY ; // OVERRIDE
 expression: EMPTY ; // OVERRIDE
 Identifier: EMPTY ; // OVERRIDE
+DottedIdentifier: EMPTY ; // OVERRIDE
 
 
 // Invokation
@@ -21,10 +23,43 @@ kwargs: (KWArg | VarKWArg)+[ARG_SEP] ;
 KWArg: name=Identifier KWARG val=expression ;
 VarKWArg: VARKWARGS val=expression ;
 
+VarKWPar: VARKWARGS name=Identifier ;
+
+// Procedure declaration
+@pass_dict
+Param: type=expression name=Identifier (DEFAULT default=expression)? ;
+
+PosOnly: POS_ONLY ;
+@pass_dict
+VarParam: VARARGS (type=expression name=Identifier)? ;
+@pass_dict
+VarKWParam: VARKWARGS type=expression name=Identifier ;
+
+@pass_last
+pos_or_kw_part: ARG_SEP Param+[ARG_SEP] ;
+
+@pass_dict
+var_pos_and_kw_only_part: ARG_SEP var_pos=VarParam kw_only=kw_only_part? ;
+@pass_last
+kw_only_part: ARG_SEP Param+[ARG_SEP] ;
+@pass_last
+var_kw_part: ARG_SEP VarKWParam ;
+
+ProcedureParams: pos_only=Param+[ARG_SEP] ARG_SEP PosOnly pos_or_kw=pos_or_kw_part? var_pos_and_kw_only=var_pos_and_kw_only_part? var_kw=var_kw_part? ARG_SEP?
+               | pos_or_kw=pos_or_kw_part var_pos_and_kw_only=var_pos_and_kw_only_part? var_kw=var_kw_part? ARG_SEP?
+               | var_pos_and_kw_only=var_pos_and_kw_only_part var_kw=var_kw_part? ARG_SEP?
+               | var_kw=var_kw_part ARG_SEP? ;
+
+/// Expression
+ProcedureExpr: PROCEXPR type=DottedIdentifier? ARG_LEFT params=ProcedureParams? ARG_RIGHT body=Block? ;
+
+/// Statement
+ProcedureStmt: PROC name=Identifier ;
+
 
 terminals
 
-KWARG: '=' ;
+KWARG: ':' ;
 
 VARARGS: '*' ;
 VARKWARGS: '**' ;
@@ -32,3 +67,11 @@ VARKWARGS: '**' ;
 ARG_LEFT: '(' ;
 ARG_RIGHT: ')' ;
 ARG_SEP: ',' ;
+
+DEFAULT: '=' ;
+
+PROC: 'proc' ;
+
+POS_ONLY: '/' ;
+
+PROCEXPR: '$' ;
