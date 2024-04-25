@@ -1,11 +1,10 @@
-import './expressions/atoms/identifier.pg';
-import './expressions/atoms/literals.pg';
+import './expressions/expression.pg' ;
 
 @Block
 Block: body=Line* ;
 
 @Line
-Line: content=(identifier.DottedIdentifier | literals.literal) LINE_END ;
+Line: content=(expression.expression) LINE_END ;
 
 
 terminals

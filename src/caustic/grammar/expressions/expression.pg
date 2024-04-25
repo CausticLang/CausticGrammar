@@ -1,0 +1,18 @@
+import './atoms/identifier.pg' ;
+import './atoms/literals.pg' ;
+
+import './operator.pg' ;
+
+atom: literals.literal | identifier.DottedIdentifier ;
+
+expression: binding | operator.operator | atom ;
+@pass_inner
+binding: GROUP_LEFT expression GROUP_RIGHT ;
+
+operator.expression: expression ;
+
+
+terminals
+
+GROUP_LEFT: '(' ;
+GROUP_RIGHT: ')' ;
