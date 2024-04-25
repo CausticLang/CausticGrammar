@@ -3,12 +3,20 @@ import './atoms/literals.pg' ;
 
 import './operator.pg' ;
 
+Invoke: EMPTY ; // OVERRIDE
+//ProcedureExpr: EMPTY ; // OVERRIDE
+
 atom: literals.literal | identifier.DottedIdentifier ;
 
-expression: binding | operator.operator | atom ;
+expression: binding           {99, left}
+          | Invoke            {20, left}
+          | operator.operator {15, left}
+          | atom              {10, left} ;
+
 @pass_inner
 binding: GROUP_LEFT expression GROUP_RIGHT ;
 
+// Overloads
 operator.expression: expression ;
 
 

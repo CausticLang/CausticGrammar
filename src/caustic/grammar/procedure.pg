@@ -1,0 +1,34 @@
+expression: EMPTY ; // OVERRIDE
+Identifier: EMPTY ; // OVERRIDE
+
+
+// Invokation
+Invoke: proc=expression
+        ARG_LEFT
+        passed=args?
+        ARG_RIGHT ;
+
+@pass_single
+args: (PosArg {0} | VarPosArg {1} | KWArg {1} | VarKWArg {1})+[ARG_SEP] ARG_SEP? ;
+
+posargs: (PosArg {0} | VarPosArg {1})+[ARG_SEP] ;
+
+PosArg: val=expression ;
+VarPosArg: VARARGS val=expression ;
+
+kwargs: (KWArg | VarKWArg)+[ARG_SEP] ;
+
+KWArg: name=Identifier KWARG val=expression ;
+VarKWArg: VARKWARGS val=expression ;
+
+
+terminals
+
+KWARG: '=' ;
+
+VARARGS: '*' ;
+VARKWARGS: '**' ;
+
+ARG_LEFT: '(' ;
+ARG_RIGHT: ')' ;
+ARG_SEP: ',' ;

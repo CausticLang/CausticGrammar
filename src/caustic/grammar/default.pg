@@ -1,6 +1,8 @@
 import './keyword.pg' ;
 
 import './expressions/expression.pg' ;
+import './procedure.pg' ;
+
 
 @Block
 Block: body=Line* ;
@@ -8,6 +10,11 @@ Block: body=Line* ;
 @Line
 Line: content=(expression.expression) LINE_END ;
 
+// Overrides
+expression.Invoke: procedure.Invoke ;
+procedure.Block: Block ;
+procedure.expression: expression.expression ;
+procedure.Identifier: expression.identifier.Identifier ;
 
 terminals
 
