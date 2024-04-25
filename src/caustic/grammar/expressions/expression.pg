@@ -1,3 +1,4 @@
+import './atoms/constants.pg' ;
 import './atoms/identifier.pg' ;
 import './atoms/literals.pg' ;
 
@@ -6,7 +7,9 @@ import './operator.pg' ;
 Invoke: EMPTY ; // OVERRIDE
 ProcedureExpr: EMPTY ; // OVERRIDE
 
-atom: literals.literal | identifier.DottedIdentifier ;
+atom: constants.constant          {99, left}
+    | literals.literal            {20, left}
+    | identifier.DottedIdentifier {00, left} ;
 
 expression: binding           {99, left}
           | ProcedureExpr     {25, left}

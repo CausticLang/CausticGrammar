@@ -1,0 +1,17 @@
+constant: BoolTrue | BoolFalse | Null | Default ;
+
+BoolTrue: BOOL_TRUE ;
+BoolFalse: BOOL_FALSE ;
+
+Null: NULL ;
+
+Default: DEFAULT ;
+
+
+terminals
+
+BOOL_TRUE: 'true' {prefer} ;
+BOOL_FALSE: 'false' {prefer} ;
+
+NULL: 'null' {prefer} ;
+DEFAULT: 'default' {prefer} ;
