@@ -12,8 +12,8 @@ __all__ = ('action',)
 action = get_collector()
 
 @action
-def Identifier(ctx, *args, name: str) -> atom.Identifier:
+def Identifier(ctx, *_, name: str) -> atom.Identifier:
     return atom.Identifier(metadata=SourceInfo.from_ctx(ctx), name=name)
 @action
-def DottedIdentifier(ctx, *args, names: list[str]) -> atom.DottedIdentifier:
+def DottedIdentifier(ctx, *_, names: list[str]) -> atom.DottedIdentifier:
     return atom.DottedIdentifier(metadata=SourceInfo.from_ctx(ctx), names=names)

@@ -13,8 +13,8 @@ __all__ = ('action',)
 action = get_collector()
 
 @action
-def Line(ctx, *args, content: bases.CausticASTNode):
+def Line(ctx, *_, content: bases.CausticASTNode):
     return block.Line(metadata=SourceInfo.from_ctx(ctx), content=content)
 @action
-def Block(ctx, *args, body: cabc.Sequence[bases.CausticASTNode]):
+def Block(ctx, *_, body: cabc.Sequence[bases.CausticASTNode]):
     return block.Block(metadata=SourceInfo.from_ctx(ctx), body=body)
