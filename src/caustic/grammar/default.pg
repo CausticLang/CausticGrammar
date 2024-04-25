@@ -10,7 +10,7 @@ Start: Block* ;
 Block: body=Line | BLOCK_START body=Line* BLOCK_END ;
 
 @Line
-Line: content=(expression.expression | Block) LINE_END ;
+Line: content=(expression.expression | Block)? LINE_END ;
 
 // Overrides
 expression.Invoke: procedure.Invoke ;
