@@ -16,16 +16,16 @@ Integer_B16: "0x" val=BASE16INT {base:16} ;
 Char: '`' val=CHAR_INNER '`' ;
 
 
-bytes: 'b' (Bytes_ML_S | Bytes_ML_D | Bytes_SL_S | Bytes_SL_D) ;
+bytes: Bytes_ML_S | Bytes_ML_D | Bytes_SL_S | Bytes_SL_D ;
 
 @Bytes
-Bytes_ML_S: raw?='r' "'''" val=ML_SQ_STRING_INNER "'''" ;
+Bytes_ML_S: raw?='r' "b'''" val=ML_SQ_STRING_INNER "'''" ;
 @Bytes
-Bytes_ML_D: raw?='r' '"""' val=ML_DQ_STRING_INNER '"""' ;
+Bytes_ML_D: raw?='r' 'b"""' val=ML_DQ_STRING_INNER '"""' ;
 @Bytes
-Bytes_SL_S: raw?='r' "'" val=SL_SQ_STRING_INNER "'" ;
+Bytes_SL_S: raw?='r' "b'" val=SL_SQ_STRING_INNER "'" ;
 @Bytes
-Bytes_SL_D: raw?='r' '"' val=SL_DQ_STRING_INNER '"' ;
+Bytes_SL_D: raw?='r' 'b"' val=SL_DQ_STRING_INNER '"' ;
 
 
 string: String_ML_S | String_ML_D | String_SL_S | String_SL_D ;
