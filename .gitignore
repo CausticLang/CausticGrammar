@@ -1,0 +1,4 @@
+
+# Caches
+__pycache__/ # Python bytecode cache
+*.pgt # cached ParGlare tables
