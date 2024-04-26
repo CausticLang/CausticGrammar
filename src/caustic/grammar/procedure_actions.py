@@ -5,7 +5,7 @@ import typing
 import operator
 import itertools
 from parglare import get_collector
-from caustic.cst import bases, atom, block, expression
+from caustic.cst import bases, atom, block, expression, statement
 from caustic.parser import SourceInfo
 from collections import abc as cabc
 #</Imports
@@ -94,3 +94,8 @@ def ProcedureParams(ctx, *_,
 def ProcedureExpr(ctx, *_, type: atom.DottedIdentifier | None, params: dict | None, body: block.Block | None) -> expression.ProcedureExpr:
     kwargs = {'params': ()} if params is None else params
     return expression.ProcedureExpr(metadata=SourceInfo.from_ctx(ctx), return_type=type, **kwargs, body=body)
+## Statement
+@action
+def ProcedureStmt(ctx, *_, name: atom.Identifier, type: atom.DottedIdentifier | None, params: dict | None, body: block.Block | None) -> statement.ProcedureStatement:
+    kwargs = {'params': ()} if params is None else params
+    return statement.ProcedureStatement(metadata=SourceInfo.from_ctx(ctx), name=name, return_type=type, **kwargs, body=body)

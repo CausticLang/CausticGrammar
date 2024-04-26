@@ -54,7 +54,7 @@ ProcedureParams: pos_only=Param+[ARG_SEP] ARG_SEP PosOnly pos_or_kw=pos_or_kw_pa
 ProcedureExpr: PROCEXPR type=DottedIdentifier? ARG_LEFT params=ProcedureParams? ARG_RIGHT body=Block? ;
 
 /// Statement
-ProcedureStmt: PROC name=Identifier ;
+ProcedureStmt: PROC type=DottedIdentifier? name=Identifier ARG_LEFT params=ProcedureParams? ARG_RIGHT body=Block? ;
 
 
 terminals
@@ -70,7 +70,7 @@ ARG_SEP: ',' ;
 
 DEFAULT: '=' ;
 
-PROC: 'proc' ;
+PROC: 'proc' {prefer} ;
 
 POS_ONLY: '/' ;
 
