@@ -59,14 +59,14 @@ def ProcedureParams(ctx, *_,
                     var_kw: cabc.Sequence[dict] | None = None) -> dict:
     res = {'params': []}
     # positional only
-    if pos_only is None: res['pos_only'] = 0
+    if pos_only is None: res['pos_only'] = None
     else:
         res['pos_only'] = len(pos_only)
         for pop in pos_only:
             res['params'].append((pop['name'], pop['type']))
     # positional or keyword
     if pos_or_kw is not None:
-        for pokwp in pos_only:
+        for pokwp in pos_or_kw:
             res['params'].append((pokwp['name'], pokwp['type']))
     # var-positional and keyword
     if var_pos_and_kw_only is None:
