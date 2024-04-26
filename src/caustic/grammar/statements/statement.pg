@@ -1,0 +1,6 @@
+import './directive.pg' ;
+
+ProcedureStmt: EMPTY ; // OVERRIDE
+
+
+statement: directive.Directive | ProcedureStmt ;
