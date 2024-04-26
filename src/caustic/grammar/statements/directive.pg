@@ -1,7 +1,9 @@
-Directive: DIRECTIVE name=DIRECTIVE_NAME args=DirectiveArg+ ;
+Directive: DIRECTIVE name=DIRECTIVE_NAME args=directive_arg* ;
 
-DirectiveArg: DirectiveBlock | DirectiveArg ;
+directive_arg: DirectiveBlock {10} | DirectiveQuoted {05} | DIRECTIVE_ARG {01} ;
 
+@pass_inner
+DirectiveQuoted: DIRECTIVE_QUOTE DIRECTIVE_QUOTED DIRECTIVE_QUOTE ;
 @pass_inner
 DirectiveBlock: DIRECTIVE_BLOCK_START DIRECTIVE_BLOCK DIRECTIVE_BLOCK_STOP ;
 
@@ -16,4 +18,6 @@ DIRECTIVE_BLOCK_START: '{{{' ;
 DIRECTIVE_BLOCK_STOP: '}}}' ;
 
 DIRECTIVE_ARG: /.+?\b/ ;
-DIRECTIVE_BLOCK: /(.|\n)*/ ;
+DIRECTIVE_QUOTE: '"' ;
+DIRECTIVE_QUOTED: /(?:(?:\\")|[^"])*/ ;
+DIRECTIVE_BLOCK: /(?:.|\n)*/ ;
