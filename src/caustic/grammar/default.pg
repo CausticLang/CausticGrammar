@@ -15,6 +15,8 @@ Line: content=(statement.statement | expression.expression | Block)? LINE_END ;
 
 // Overrides
 statement.ProcedureStmt: procedure.ProcedureStmt ;
+statement.typedecl.expression: expression.expression ;
+statement.typedecl.Identifier: expression.identifier.Identifier ;
 expression.Invoke: procedure.Invoke ;
 expression.ProcedureExpr: procedure.ProcedureExpr ;
 procedure.Block: Block ;
