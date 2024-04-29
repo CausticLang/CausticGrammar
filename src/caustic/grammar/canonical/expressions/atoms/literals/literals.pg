@@ -1,0 +1,4 @@
+import './numeric.pg' ;
+
+
+literal: numeric.Integer ;

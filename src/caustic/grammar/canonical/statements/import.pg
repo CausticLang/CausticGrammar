@@ -1,18 +1,18 @@
-import '../expressions/atoms/identifier.pg' ;
+import '../canonical.pg' ;
 
 
 @node
 ImportStatement {mod:'statement'}: i_from=import_from? IMPORT imports=import_list+ ;
 
 @pass_last
-import_from: IMPORT_FROM identifier.DottedIdentifier ;
+import_from: IMPORT_FROM canonical.expressions.atoms.identifier.DottedIdentifier ;
 
 import_list: import+[IMPORT_SEP] ;
 
-import: target=identifier.DottedIdentifier i_as=import_as? ;
+import: target=canonical.expressions.atoms.identifier.DottedIdentifier i_as=import_as? ;
 
 @pass_last
-import_as: IMPORT_AS identifier.Identifier ;
+import_as: IMPORT_AS canonical.expressions.atoms.identifier.Identifier ;
 
 
 terminals

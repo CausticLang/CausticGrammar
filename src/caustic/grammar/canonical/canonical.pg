@@ -1,0 +1,6 @@
+// Caustic's canonical grammar -- mostly C-like
+import './expressions/expressions.pg' ;
+import './statements/statements.pg' ;
+import './block.pg' ;
+
+Main: block.block* ;

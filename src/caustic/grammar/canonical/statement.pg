@@ -1,5 +1,0 @@
-import './statements/directive.pg' ;
-import './statements/import.pg' ;
-
-
-statement: directive.Directive | import.ImportStatement ;

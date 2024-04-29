@@ -1,4 +1,0 @@
-// Caustic's canonical grammar -- mostly C-like
-import './canonical/block.pg' ;
-
-Main: block.block* ;

@@ -1,5 +1,4 @@
-import './expression.pg' ;
-import './statement.pg' ;
+import './canonical.pg' ;
 
 
 block: Block {2} | Line {1} ;
@@ -8,7 +7,7 @@ block: Block {2} | Line {1} ;
 Block {mod:'block'}: BLOCK_START body=Line* BLOCK_END ;
 
 @node
-Line {mod:'block'}: content=( statement.statement {2} | expression.expression {1} ) LINE_END ;
+Line {mod:'block'}: content=( canonical.statements.statement {2} | canonical.expressions.expression {1} ) LINE_END ;
 
 
 terminals

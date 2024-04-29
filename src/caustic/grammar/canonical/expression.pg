@@ -1,7 +1,0 @@
-import './expressions/atoms/identifier.pg' ;
-import './expressions/atoms/literals/numeric.pg' ;
-
-
-expression: identifier.DottedIdentifier | literal ;
-
-literal: numeric.Integer ;
