@@ -2,4 +2,4 @@ import './identifier.pg' ;
 import './literals/literals.pg' ;
 
 
-atom: literals.literal {3} | identifier.DottedIdentifier {2} | identifier.Identifier {1} ;
+atom: literals.literal {3} | identifier.DottedIdentifier {2} ;
