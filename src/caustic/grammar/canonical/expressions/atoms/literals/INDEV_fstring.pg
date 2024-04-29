@@ -1,0 +1,44 @@
+/* INDEV */
+
+import './literals.pg' ;
+import '../../../canonical.pg' ;
+
+
+@pass_last
+FString: FSTRING ( sq_fstring | dq_fstring ) ;
+
+@pass_inner
+sq_fstring: SINGLEQUOTE ( ml_sq_fstring_inner {2} | sl_sq_fstring_inner {1} ) SINGLEQUOTE ;
+
+sl_sq_fstring_inner: ( fstring_expr_part {3} | fstring_escaped {2} | SQ_FSTRING {1} )* ;
+@pass_index
+ml_sq_fstring_inner {index:2}: SINGLEQUOTE SINGLEQUOTE ( fstring_expr_part {3} | fstring_escaped {2} | ML_SQ_FSTRING {1} )* SINGLEQUOTE SINGLEQUOTE ;
+
+@pass_inner
+dq_fstring: DOUBLEQUOTE ( ml_dq_fstring_inner {2} | sl_dq_fstring_inner {1} ) DOUBLEQUOTE ;
+
+sl_dq_fstring_inner: ( fstring_expr_part {3} | fstring_escaped {2} | DQ_FSTRING {1} )* ;
+@pass_index
+ml_dq_fstring_inner {index:2}: DOUBLEQUOTE DOUBLEQUOTE ( fstring_expr_part {3} | fstring_escaped {2} | ML_DQ_FSTRING {1} )* DOUBLEQUOTE DOUBLEQUOTE ;
+
+@pass_inner
+fstring_expr_part: FSTRING_EXPR_OPEN canonical.expressions.expression FSTRING_EXPR_CLOSE ;
+
+@expr
+fstring_escaped {expr:'args[0][0]'}: ( FSTRING_EXPR_OPEN FSTRING_EXPR_OPEN ) | ( FSTRING_EXPR_CLOSE FSTRING_EXPR_CLOSE ) ;
+
+
+terminals
+
+SINGLEQUOTE: "'" ;
+DOUBLEQUOTE: '"' ;
+
+FSTRING: 'f' ;
+FSTRING_EXPR_OPEN: '{' ;
+FSTRING_EXPR_CLOSE: '}' ;
+
+SQ_FSTRING: /(?:(?:\\')|[^'{}])*/ ;
+ML_SQ_FSTRING: /(?:(?:\\''')|[^'{}]|(?:''?))*?(?=''')/ ;
+
+DQ_FSTRING: /(?:(?:\\")|[^"{}])*/ ;
+ML_DQ_FSTRING: /(?:(?:\\""")|[^"{}]|(?:""?))*?(?=""")/ ;
