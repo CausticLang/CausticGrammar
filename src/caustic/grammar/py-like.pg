@@ -1,0 +1,6 @@
+/* Using `canonical.pg` as a base, apply some overrides to make
+   the grammar more Python-like */
+
+import './canonical.pg' ;
+
+Main: canonical.Main ;

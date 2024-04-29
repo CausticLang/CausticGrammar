@@ -1,0 +1,11 @@
+@node
+Identifier {mod:'atom'}: name=IDENTIFIER ;
+
+@node
+DottedIdentifier {mod:'atom'}: names=IDENTIFIER+[IDENTIFIER_DOT] ;
+
+
+terminals
+
+IDENTIFIER: /[a-zA-Z_]\w*/ ;
+IDENTIFIER_DOT: '.' ;

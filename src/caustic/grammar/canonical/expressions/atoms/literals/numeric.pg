@@ -1,0 +1,29 @@
+@node
+Integer {mod:'atom'}: integer_bxx {3} | integer_b02 {2} | integer_b10 {1} | integer_b16 {2} ;
+
+@pass_meta
+integer_b02 {base:02}: BASE02INT val=BINARY ;
+
+@pass_meta
+integer_b10 {base:10}: val=DECIMAL ;
+
+@pass_meta
+integer_b16 {base:16}: BASE16INT val=HEX ;
+
+@expr
+integer_bxx {expr:'{"base": int(base), "val": val}'}:
+    BASEXXINT_START base=DECIMAL BASEXXINT_DELIM val=BASEXXINT_CONTENT BASEXXINT_END ;
+
+
+terminals
+
+DECIMAL:   /\d[\d_]*/ ;
+BASE02INT: '0b' ;
+BINARY:    /[01][01_]*/ ;
+BASE16INT: '0x' ;
+HEX:       /[\da-fA-F][\da-fA-F_]/ ;
+
+BASEXXINT_START:   '0$' ;
+BASEXXINT_DELIM:   ':' ;
+BASEXXINT_CONTENT: /[^$]+/ ;
+BASEXXINT_END:     '$' ;

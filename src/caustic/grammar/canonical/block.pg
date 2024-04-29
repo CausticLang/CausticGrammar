@@ -1,0 +1,19 @@
+import './expression.pg' ;
+import './statement.pg' ;
+
+
+block: Block {2} | Line {1} ;
+
+@node
+Block {mod:'block'}: BLOCK_START body=Line* BLOCK_END ;
+
+@node
+Line {mod:'block'}: content=( statement.statement {2} | expression.expression {1} ) LINE_END ;
+
+
+terminals
+
+BLOCK_START: '{' ;
+BLOCK_END:   '}' ;
+
+LINE_END: ';' ;

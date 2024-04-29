@@ -1,9 +1,0 @@
-import './directive.pg' ;
-import './typedecl.pg' ;
-
-ProcedureStmt: EMPTY ; // OVERRIDE
-
-statement: directive.Directive | typedecl.type_decl | ProcedureStmt ;
-
-
-typedecl.ProcedureStmt: ProcedureStmt ;

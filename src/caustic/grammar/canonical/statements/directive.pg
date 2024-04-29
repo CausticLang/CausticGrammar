@@ -1,0 +1,19 @@
+@node
+Directive {mod:'statement'}: DIRECTIVE name=NOT_SPACE args=directive_arg* ;
+
+
+directive_arg: directive_block {2} | NOT_SPACE {1} ;
+
+@pass_inner
+directive_block: DIRECTIVE_BLOCK_START ANYTHING DIRECTIVE_BLOCK_END ;
+
+
+terminals
+
+DIRECTIVE: '#' ;
+
+NOT_SPACE: /\S+/ ;
+ANYTHING:  /.*/  ;
+
+DIRECTIVE_BLOCK_START: '#{{{' ;
+DIRECTIVE_BLOCK_END:   '}}}#' ;

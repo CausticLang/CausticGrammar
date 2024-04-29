@@ -1,0 +1,23 @@
+import '../expressions/atoms/identifier.pg' ;
+
+
+@node
+ImportStatement {mod:'statement'}: i_from=import_from? IMPORT imports=import_list+ ;
+
+@pass_last
+import_from: IMPORT_FROM identifier.DottedIdentifier ;
+
+import_list: import+[IMPORT_SEP] ;
+
+import: target=identifier.DottedIdentifier i_as=import_as? ;
+
+@pass_last
+import_as: IMPORT_AS identifier.Identifier ;
+
+
+terminals
+
+IMPORT_FROM: 'from' ;
+IMPORT: 'import' ;
+IMPORT_AS: 'as' ;
+IMPORT_SEP: ',' ;
