@@ -1,5 +1,5 @@
 @unpack_node
-Integer {mod:'atom'}: integer_bxx {3} | integer_b02 {2} | integer_b10 {1} | integer_b16 {2} ;
+Integer {mod:'atom'}: integer_bxx {2} | integer_bxx_lt36 {2} | integer_b02 {2} | integer_b10 {1} | integer_b16 {2} ;
 
 @pass_meta
 integer_b02 {base:02}: BASE02INT val=BINARY ;
@@ -14,6 +14,10 @@ integer_b16 {base:16}: BASE16INT val=HEX ;
 integer_bxx {expr:'{"base": int(base), "val": val}'}:
     BASEXXINT_START base=DECIMAL BASEXXINT_DELIM val=BASEXXINT_CONTENT BASEXXINT_END ;
 
+@expr
+integer_bxx_lt36 {expr:'{"base": int(base), "val": val}'}:
+    base=BASEXXINT_LT36_BASE BASEXXINT_LT36_DELIM val=BASEXXINT_LT36_CONTENT ;
+
 
 terminals
 
@@ -27,3 +31,7 @@ BASEXXINT_START:   '0$' ;
 BASEXXINT_DELIM:   ':' ;
 BASEXXINT_CONTENT: /[^$]+/ ;
 BASEXXINT_END:     '$' ;
+
+BASEXXINT_LT36_BASE:    /(?:3[0-6])|(?:[0-2]?[0-9])/ ;
+BASEXXINT_LT36_DELIM:   '#' ;
+BASEXXINT_LT36_CONTENT: /[\da-zA-Z][\da-zA-Z_]*/ ;

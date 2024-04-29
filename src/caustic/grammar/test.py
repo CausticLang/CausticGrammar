@@ -17,6 +17,7 @@ from caustic.parser import error
 test = 'from a.b import c as d, e as f, g;'
 test = '0$3:012012$;'
 #test = 'f"test{{{test}}} t";'
+test = '36#415AF;'
 
 def f(ctx, args, **kwargs):
     global p
@@ -26,7 +27,6 @@ def node_builder(ctx, args, **kwargs):
     return getattr(getattr(cst, ctx.production.user_meta['mod']),
                    ctx.production.user_meta.get('cls', ctx.production.symbol.name))(**kwargs)
 def node_unpack_builder(ctx, args, **kwargs):
-    print(args[ctx.production.user_meta.get('index', 0)])
     return node_builder(ctx, (), **(args[ctx.production.user_meta.get('index', 0)] | kwargs))
 
 grammar = parglare.Grammar.from_file('./canonical/canonical.pg')
