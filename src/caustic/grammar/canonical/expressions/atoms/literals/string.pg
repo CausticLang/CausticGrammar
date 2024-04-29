@@ -1,0 +1,32 @@
+@node
+Bytes{mod:'atom', index:2}: raw?=RAW_STRING BYTE_STRING val=( sq_string | dq_string ) ;
+
+@node
+String{mod:'atom', index:1}: raw?=RAW_STRING val=( sq_string | dq_string ) ;
+
+
+@pass_inner
+sq_string: SINGLEQUOTE ( ml_sq_string {2} | SQ_STRING {1} ) SINGLEQUOTE ;
+
+@pass_index
+ml_sq_string {index:2}: SINGLEQUOTE SINGLEQUOTE ML_SQ_STRING SINGLEQUOTE SINGLEQUOTE ;
+
+@pass_inner
+dq_string: DOUBLEQUOTE ( ml_dq_string {2} | DQ_STRING {1} ) DOUBLEQUOTE ;
+
+@pass_index
+ml_dq_string {index:2}: DOUBLEQUOTE DOUBLEQUOTE ML_DQ_STRING DOUBLEQUOTE DOUBLEQUOTE ;
+
+
+terminals
+
+BYTE_STRING: 'b' ;
+RAW_STRING: 'r' ;
+
+SINGLEQUOTE: "'" ;
+SQ_STRING: /(?:(?:\\')|[^'])*/ ;
+ML_SQ_STRING: /(?:(?:\\""")|[^"]|(?:""?))*?(?=""")/ ;
+
+DOUBLEQUOTE: '"' ;
+DQ_STRING: /(?:(?:\\")|[^"])*/ ;
+ML_DQ_STRING: /(?:(?:\\""")|[^"]|(?:""?))*?(?=""")/ ;

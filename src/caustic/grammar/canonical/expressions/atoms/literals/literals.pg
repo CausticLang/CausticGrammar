@@ -1,4 +1,5 @@
 import './numeric.pg' ;
+import './string.pg' ;
 
 
-literal: numeric.Integer ;
+literal: numeric.Integer {3} | string.Bytes {2} | string.String {1} ;
