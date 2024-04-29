@@ -6,7 +6,7 @@ String{mod:'atom', index:1}: raw?=RAW_STRING val=( sq_string | dq_string ) ;
 
 
 @pass_inner
-sq_string: SINGLEQUOTE ( ml_sq_string {2} | SQ_STRING {1} ) SINGLEQUOTE ;
+sq_string: SINGLEQUOTE (ml_sq_string {2} | SQ_STRING {1}) SINGLEQUOTE ;
 
 @pass_index
 ml_sq_string {index:2}: SINGLEQUOTE SINGLEQUOTE ML_SQ_STRING SINGLEQUOTE SINGLEQUOTE ;
