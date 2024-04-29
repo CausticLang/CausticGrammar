@@ -1,0 +1,18 @@
+import './canonical.pg' ;
+
+
+block: Block {2} | line {1} ;
+
+@node
+Block {node:'block.Block'}: BLOCK_START body=line* BLOCK_END ;
+
+@pass_single
+line: ( canonical.statements.statement {2} | canonical.expressions.expression {1} ) LINE_END ;
+
+
+terminals
+
+BLOCK_START: '{' ;
+BLOCK_END:   '}' ;
+
+LINE_END: ';' ;

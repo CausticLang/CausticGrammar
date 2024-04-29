@@ -1,5 +1,5 @@
 @unpack_node
-Integer {mod:'atom'}: integer_bxx {2} | integer_bxx_lt36 {2} | integer_b02 {2} | integer_b10 {1} | integer_b16 {2} ;
+Integer {node:'expressions.atoms.Integer'}: integer_bxx {2} | integer_bxx_lt36 {2} | integer_b02 {2} | integer_b10 {1} | integer_b16 {2} ;
 
 @pass_meta
 integer_b02 {base:02}: BASE02INT val=BINARY ;
