@@ -1,5 +1,6 @@
+import '../canonical.pg' ;
 import './directive.pg' ;
 import './import.pg' ;
 
 
-statement: directive.Directive | import.ImportStatement ;
+statement: directive.Directive | import.ImportStatement | canonical.procedure.ProcedureStatement ;

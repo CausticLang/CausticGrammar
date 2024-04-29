@@ -1,4 +1,5 @@
+import '../canonical.pg' ;
 import './atoms/atoms.pg' ;
 
 
-expression: atoms.atom ;
+expression: atoms.atom | canonical.procedure.ProcedureExpr ;

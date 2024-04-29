@@ -1,0 +1,46 @@
+import './canonical.pg' ;
+
+
+@node
+ProcedureStatement {mod:'statement'}:
+    PROCEDURE type=canonical.expressions.atoms.identifier.DottedIdentifier? name=canonical.expressions.atoms.identifier.DottedIdentifier
+    PROC_OPEN params=args? PROC_CLOSE
+    body=canonical.block.block? ;
+
+@node
+ProcedureExpr {mod:'expression'}:
+    PROCEDURE PROC_OPEN type=canonical.expressions.atoms.identifier.DottedIdentifier? PROC_CLOSE
+    PROC_OPEN params=args? PROC_CLOSE
+    body=canonical.block.block? ;
+
+arg: type=canonical.expressions.atoms.identifier.DottedIdentifier name=canonical.expressions.atoms.identifier.DottedIdentifier default=arg_default? ;
+
+@pass_last
+arg_default: EQUALS canonical.expressions.expression ;
+
+@pass_single
+pos_only_part: arg+[ARG_SEP] ARG_SEP POSONLY_ARG ;
+
+pos_or_kw_part: arg+[ARG_SEP] ;
+
+varpos_and_kwonly_part: STAR ARG_SEP kwonly_part=arg+[ARG_SEP]
+                      | STAR varpos=arg ( ARG_SEP kwonly_part=arg+[ARG_SEP] )? ;
+
+args: ( pos_only=pos_only_part (ARG_SEP pos_or_kw=pos_or_kw_part)? (ARG_SEP vararg_and_kwonly=varpos_and_kwonly_part)? {3}
+      | pos_or_kw=pos_or_kw_part (ARG_SEP varpos_and_kwonly=varpos_and_kwonly_part)? {2}
+      | varpos_and_kwonly=varpos_and_kwonly_part {1}
+      ) ARG_SEP? ;
+
+
+terminals
+
+STAR: '*' ;
+EQUALS: '=' ;
+
+PROCEDURE: 'proc' ;
+
+ARG_SEP: ',' {prefer} ;
+POSONLY_ARG: '/' ;
+
+PROC_OPEN: '(' ;
+PROC_CLOSE: ')' ;

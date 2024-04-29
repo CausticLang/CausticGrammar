@@ -2,5 +2,6 @@
 import './expressions/expressions.pg' ;
 import './statements/statements.pg' ;
 import './block.pg' ;
+import './procedure.pg' ;
 
 Main: block.block* ;
