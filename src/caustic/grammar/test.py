@@ -20,10 +20,13 @@ def f(ctx, args, **kwargs):
     p = (ctx, args, kwargs)
 
 def node_builder(ctx, args, **kwargs):
+    print(ctx, args, kwargs)
     return getattr(getattr(cst, ctx.production.user_meta['mod']),
                    ctx.production.user_meta.get('cls', ctx.production.symbol.name))(**kwargs)
+def node_unpack_builder(ctx, args):
+    return node_builder(ctx, (), **args[0])
 
-grammar = parglare.Grammar.from_file('./test.pg')
+grammar = parglare.Grammar.from_file('./canonical/canonical.pg')
 parser = parglare.GLRParser(grammar, lexical_disambiguation=True, actions={
     'pass_last': lambda ctx, args: args[-1],
     'pass_index': lambda ctx, args: args[ctx.production.index],
@@ -31,6 +34,7 @@ parser = parglare.GLRParser(grammar, lexical_disambiguation=True, actions={
     'obj': lambda ctx, _, **kwargs: kwargs,
     'pass_meta': lambda ctx, _, **kwargs: ctx.production.user_meta | kwargs,
     'node': node_builder,
+    'unpack_node': node_unpack_builder,
 }, tables=parglare.LALR)
 forest = parser.parse(test)
 tree = forest.get_first_tree()
