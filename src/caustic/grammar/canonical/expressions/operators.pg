@@ -1,0 +1,133 @@
+import '../expressions/expressions.pg' ;
+
+
+operator: unary_op   {left}
+        | binary_op  {left}
+        | ternary_op {left} ;
+
+
+unary_op: prefix | suffix ;
+
+prefix: Positive | Negative | LogInverse | BitInverse ;
+suffix: Increment | Decrement ;
+
+@node
+Positive {33, node:'expressions.operators.Positive'}: PLUS target=expressions.expression ;
+@node
+Negative {33, node:'expressions.operators.Negative'}: MINUS target=expressions.expression ;
+@node
+LogInverse {33, node:'expressions.operators.LogInverse'}: LOGINVERT target=expressions.expression ;
+@node
+BitInverse {33, node:'expressions.operators.BitInverse'}: BITINVERT target=expressions.expression ;
+@node
+Increment {34, node:'expressions.operators.Increment'}: target=expressions.expression INCREMENT ;
+@node
+Decrement {34, node:'expressions.operators.Decrement'}: target=expressions.expression DECREMENT ;
+
+
+binary_op: Subscription
+         | Add | Sub | Mult | Div | Mod | Exp
+         | EQ | NE | LT | LE | GT | GE | NullCoalescing
+         | LogAnd | LogOr | LogXOr
+         | BitAnd | BitOr | BitXOr | LShift | RShift ;
+
+@node
+Subscription {33, node:'expressions.operators.Subscription'}:
+    left=expressions.expression SUBSCRIPT_OPEN right=expressions.expression SUBSCRIPT_CLOSE ;
+// Arithmetic
+@node
+Add {30, node:'expressions.operators.Add'}: left=expressions.expression PLUS right=expressions.expression ;
+@node
+Sub {30, node:'expressions.operators.Sub'}: left=expressions.expression MINUS right=expressions.expression ;
+@node
+Mult {31, node:'expressions.operators.Mult'}: left=expressions.expression MULT right=expressions.expression ;
+@node
+MMul {31, node:'expressions.operators.MMul'}: left=expressions.expression MMUL right=expressions.expression ;
+@node
+Div {31, node:'expressions.operators.Div'}: left=expressions.expression DIV right=expressions.expression ;
+@node
+Mod {31, node:'expressions.operators.Mod'}: left=expressions.expression MOD right=expressions.expression ;
+@node
+Exp {32, node:'expressions.operators.Exp'}: left=expressions.expression EXP right=expressions.expression ;
+// Comparison
+@node
+EQ {27, node:'expressions.operators.EQ'}: left=expressions.expression EQ_OP right=expressions.expression ;
+@node
+NE {27, node:'expressions.operators.NE'}: left=expressions.expression NE_OP right=expressions.expression ;
+@node
+LT {28, node:'expressions.operators.LT'}: left=expressions.expression LT_OP right=expressions.expression ;
+@node
+LE {28, node:'expressions.operators.LE'}: left=expressions.expression LE_OP right=expressions.expression ;
+@node
+GT {28, node:'expressions.operators.GT'}: left=expressions.expression GT_OP right=expressions.expression ;
+@node
+GE {28, node:'expressions.operators.GE'}: left=expressions.expression GE_OP right=expressions.expression ;
+@node
+NullCoalescing {20, node:'expressions.operators.NullCoalescing'}: left=expressions.expression NULLCOALESCING right=expressions.expression ;
+// Logical
+@node
+LogAnd {22, node:'expressions.operators.LogAnd'}: left=expressions.expression LOGAND right=expressions.expression ;
+@node
+LogOr {20, node:'expressions.operators.LogOr'}: left=expressions.expression LOGOR right=expressions.expression ;
+@node
+LogXOr {21, node:'expressions.operators.LogXOr'}: left=expressions.expression LOGXOR right=expressions.expression ;
+// Bitwise
+@node
+BitAnd {26, node:'expressions.operators.BitAnd'}: left=expressions.expression BITAND right=expressions.expression ;
+@node
+BitOr {25, node:'expressions.operators.BitOr'}: left=expressions.expression BITOR right=expressions.expression ;
+@node
+BitXOr {24, node:'expressions.operators.BitXOr'}: left=expressions.expression BITXOR right=expressions.expression ;
+/// Shift
+@node
+LShift {29, node:'expressions.operators.LShift'}: left=expressions.expression LSHIFT right=expressions.expression ;
+@node
+RShift {29, node:'expressions.operators.RShift'}: left=expressions.expression RSHIFT right=expressions.expression ;
+
+
+ternary_op: TernaryConditional ;
+
+@node
+TernaryConditional {10, node:'expressions.operators.TernaryConditional'}:
+    condition=expressions.expression TERNARYCOND_COND true=expressions.expression TERNARYCOND_SEP false=expressions.expression ;
+
+
+terminals
+
+PLUS: '+' ;
+MINUS: '-' ;
+
+LOGINVERT: '!' ;
+BITINVERT: '~' ;
+INCREMENT: '++' ;
+DECREMENT: '--' ;
+
+MULT: '*' ;
+MMUL: '@' ;
+DIV: '/' ;
+MOD: '%' ;
+EXP: '**' ;
+
+EQ_OP: '==' ;
+NE_OP: '!=' ;
+LT_OP: '<' ;
+LE_OP: '<=' ;
+GT_OP: '>' ;
+GE_OP: '>=' ; 
+NULLCOALESCING: '??' ;
+
+LOGAND: '&&' ;
+LOGOR: '||' ;
+LOGXOR: '^^' ;
+
+BITAND: '&' ;
+BITOR: '|' ;
+BITXOR: '^' ;
+LSHIFT: '<<' ;
+RSHIFT: '>>' ;
+
+SUBSCRIPT_OPEN: '[' ;
+SUBSCRIPT_CLOSE: ']' ;
+
+TERNARYCOND_COND: '?' ;
+TERNARYCOND_SEP: ':' ;

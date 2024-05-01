@@ -1,0 +1,15 @@
+import './procedure.pg' ;
+import './expressions/identifier.pg' ;
+
+
+@node
+Type: base=identifier.DottedIdentifier sub=subtype? {node:'typedecl.Type'} ;
+
+@pass_inner
+subtype: SUBTYPE_OPEN Type SUBTYPE_CLOSE ;
+
+
+terminals
+
+SUBTYPE_OPEN: '<' ;
+SUBTYPE_CLOSE: '>' ;

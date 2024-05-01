@@ -1,0 +1,63 @@
+import './declare.pg' ;
+import '../block.pg' ;
+import '../types.pg' ;
+import '../procedure.pg' ;
+import '../expressions/expressions.pg' ;
+
+
+object: Enum | Struct | Namespace | Class ;
+
+
+@pass_inner
+inherits: types.SUBTYPE_OPEN expressions.identifier.Identifier types.SUBTYPE_CLOSE ;
+
+@pass_last
+equals_val: declare.ASSIGN expressions.expression ; 
+
+@node
+Enum {20, node:'statements.objects.Enum'}:
+    ENUM type=types.subtype? name=expressions.identifier.Identifier
+    block.BLOCK_OPEN members=enum_member+[block.LINE_END] block.LINE_END? block.BLOCK_CLOSE ;
+
+enum_member: name=expressions.identifier.Identifier val=equals_val? ;
+
+@node
+Struct {20, node:'statements.objects.Struct'}:
+    STRUCT name=expressions.identifier.Identifier super=inherits?
+    block.BLOCK_OPEN members=struct_member+[block.LINE_END] block.LINE_END block.BLOCK_CLOSE ;
+
+struct_member: struct_member_ ;
+struct_member_: type=types.Type name=expressions.identifier.Identifier default=equals_val? ;
+
+@namespace
+Namespace {20}:
+    NAMESPACE name=expressions.identifier.Identifier super=inherits?
+    block.BLOCK_OPEN members=namespace_member+[block.LINE_END] block.LINE_END block.BLOCK_CLOSE ;
+
+@pass_single
+namespace_member: namespace_member_ | procedure.ProcedureStmt ;
+@namespace_val
+namespace_member_: type=types.Type name=expressions.identifier.Identifier val=equals_val ;
+
+@cls
+Class {20}:
+    CLASS name=expressions.identifier.Identifier super=inherits?
+    block.BLOCK_OPEN members=class_member+[block.LINE_END] block.LINE_END block.BLOCK_CLOSE ;
+
+class_member: class_var | class_attribute | procedure.ProcedureStmt ;
+
+@unpack
+class_attribute: struct_member_ ;
+
+@pass_last
+class_var {11}: CLASSVAR namespace_member_ ;
+
+
+terminals
+
+ENUM: 'enum' ;
+STRUCT: 'struct' ;
+NAMESPACE: 'namespace' ;
+CLASS: 'class' ;
+
+CLASSVAR: '$' ;

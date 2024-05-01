@@ -1,0 +1,24 @@
+literal: Integer {1} ;
+
+
+@unpack_node
+Integer {node:'expressions.atoms.Integer'}:
+    integer_b02 {2}
+  | integer_b10 {1}
+  | integer_b16 {2} ;
+
+@pass_meta
+integer_b02 {base:2} : BASE02PFX val=BASE02 ;
+@pass_meta
+integer_b10 {base:10}: val=BASE10 ;
+@pass_meta
+integer_b16 {base:16}: BASE16PFX val=BASE16 ;
+
+
+terminals
+
+BASE02: /[01][01_]*/ ;
+BASE02PFX: '0b' ;
+BASE10: /\d[\d_]*/ ;
+BASE16PFX: '0x' ;
+BASE16: /[\da-fA-F][\da-fA-F_]*/ ;

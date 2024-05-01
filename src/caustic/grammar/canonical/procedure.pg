@@ -1,0 +1,81 @@
+import './block.pg' ;
+import './types.pg' ;
+import './statements/declare.pg' ;
+import './expressions/identifier.pg' ;
+import './expressions/expressions.pg' ;
+
+
+@pass_last
+equals_expr: declare.ASSIGN expressions.expression ;
+
+
+// Declaration
+
+/// Stmt
+@proc_stmt
+ProcedureStmt:
+    PROC return_type=types.Type? name=identifier.Identifier
+    PROC_LEFT params=params? PROC_RIGHT
+    body=block.Block ;
+
+/// Expr
+@proc_expr
+ProcedureExpr:
+    PROC return_type=procexpr_return?
+    PROC_LEFT params=params? PROC_RIGHT
+    body=block.Block ;
+
+@pass_inner
+procexpr_return: types.SUBTYPE_OPEN types.Type types.SUBTYPE_CLOSE ;
+
+/// Generic
+@proc_params
+params: pos_only=param+[ARG_SEP] ARG_SEP POS_ONLY pos_or_kw=param_part? var_pos_and_kwonly=var_pos_and_kwonly_part? ARG_SEP?
+      | pos_or_kw=param+[ARG_SEP] var_pos_and_kwonly=var_pos_and_kwonly_part? ARG_SEP?
+      | var_pos_and_kwonly=var_pos_and_kwonly ARG_SEP? ;
+
+
+@pass_last
+param_part: ARG_SEP param+[ARG_SEP] ;
+
+var_pos_and_kwonly: var_pos=var_pos kwonly=param_part?
+                  | VAR_POS kwonly=param_part ;
+@pass_last
+var_pos_and_kwonly_part: ARG_SEP var_pos_and_kwonly ;
+@proc_param
+var_pos: VAR_POS type=types.Type? name=identifier.Identifier ;
+
+
+@proc_param
+param: type=types.Type name=identifier.Identifier default=equals_expr? ;
+
+
+// Invokation
+@proc_invoke
+Invoke {35}: target=expressions.expression PROC_LEFT args=args? PROC_RIGHT ;
+
+@proc_args
+args: args=arg+[ARG_SEP] kwargs=kwargs_part?
+    | kwargs=kwarg+[ARG_SEP] ;
+
+@pass_meta
+arg: val=expressions.expression {1, unpack:false}
+   | VAR_POS val=expressions.expression {2, unpack:true} ;
+
+@pass_last
+kwargs_part: ARG_SEP kwarg+[ARG_SEP] ;
+kwarg: name=expressions.identifier.Identifier val=equals_expr ;
+
+
+terminals
+
+PROC: 'proc' ;
+
+ARG_SEP: ',' ;
+
+PROC_LEFT: '(' ;
+PROC_RIGHT: ')' ;
+
+POS_ONLY: '/' ;
+VAR_POS:  '*' ;
+VAR_KW:   '**' ; // not implemented (yet)

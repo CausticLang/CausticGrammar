@@ -1,0 +1,20 @@
+import './literals.pg' ;
+import './operators.pg' ;
+import './identifier.pg' ;
+import '../procedure.pg' ;
+
+expression: bound_expr {9}
+          | procedure.ProcedureExpr {5}
+          | procedure.Invoke {4}
+          | operators.operator {3}
+          | literals.literal {2}
+          | identifier.DottedIdentifier {1} ;
+
+@pass_inner
+bound_expr: BIND_OPEN expression BIND_CLOSE ;
+
+
+terminals
+
+BIND_OPEN: '(' ;
+BIND_CLOSE: ')' ;

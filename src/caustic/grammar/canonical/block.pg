@@ -1,0 +1,19 @@
+import './statements/statements.pg' ;
+import './expressions/expressions.pg' ;
+
+
+empty_line: LINE_END ;
+
+@pass_single
+line: ( statements.statement {2} | expressions.expression {1} ) LINE_END ;
+
+@node
+Block {node:'block.Block'}: BLOCK_OPEN body=( line {2} | Block {1} | empty_line {0} )* BLOCK_CLOSE ;
+
+
+terminals
+
+LINE_END: ';' ;
+
+BLOCK_OPEN: '{' ;
+BLOCK_CLOSE: '}' ;

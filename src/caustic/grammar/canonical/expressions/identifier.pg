@@ -1,0 +1,13 @@
+@node
+Identifier {node:'expressions.atoms.Identifier'}: name=IDENTIFIER ;
+
+@node
+DottedIdentifier {node:'expressions.atoms.DottedIdentifier'}:
+    names=IDENTIFIER+[IDENTIFIER_DOT] ;
+
+
+terminals
+
+IDENTIFIER: /[a-zA-Z_]\w*/ ;
+
+IDENTIFIER_DOT: '.' ;

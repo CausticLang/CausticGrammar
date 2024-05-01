@@ -1,49 +1,50 @@
-#!/bin/python
+#!/bin/python3
 
 #> Imports
 import sys
 import parglare
-import operator
 from pprint import pprint
 
 from caustic import cst
-from caustic.parser import error
+from caustic.parser.error import format_exc
 #</Imports
 
 #> Header
+def mknode(ctx, _, **kwargs):
+    kwargs = {k: v for k,v in ctx.production.user_meta.items() if k != 'node'} | kwargs
+    try:
+        return (cst.CSTNode.NODE_DIRECTORY[ctx.production.node](
+            source=cst.SourceInfo.from_parglare_ctx(ctx), **kwargs))
+    except AttributeError as ae:
+        ae.add_note(f'In production: {ctx.production!r}')
+        raise ae
+
+actions = {
+    'obj': lambda ctx, _, **kwargs: kwargs,
+    'expr': lambda ctx, args, **kwargs: eval(cxt.production.expr, kwargs | {'ctx': ctx, 'args': args, 'kwargs': kwargs}),
+    'pass_last': lambda ctx, args: args[-1],
+    'pass_meta': lambda ctx, _, **kwargs: ctx.production.user_meta | kwargs,
+    'pass_index': lambda ctx, args: args[ctx.production.index],
+
+    'node': mknode,
+    'unpack_node': lambda ctx, args, **kwargs: mknode(ctx, (), **(args[ctx.production.user_meta.get('index', 0)] | kwargs))
+}
 #</Header
 
 #> Main >/
-test = 'from a.b import c as d, e as f, g;'
-test = '0$3:012012$;'
-#test = 'f"test{{{test}}} t";'
-test = '36#415AF;'
-
-def f(ctx, args, **kwargs):
-    global p
-    p = (ctx, args, kwargs)
-
-def node_builder(ctx, args, **kwargs):
-    return getattr(getattr(cst, ctx.production.user_meta['mod']),
-                   ctx.production.user_meta.get('cls', ctx.production.symbol.name))(**kwargs)
-def node_unpack_builder(ctx, args, **kwargs):
-    return node_builder(ctx, (), **(args[ctx.production.user_meta.get('index', 0)] | kwargs))
-
+import os
+try: os.remove('./canonical/canonical.pgt')
+except: pass
+print('Parsing grammar')
 grammar = parglare.Grammar.from_file('./canonical/canonical.pg')
-parser = parglare.GLRParser(grammar, lexical_disambiguation=True, actions={
-    'pass_last': lambda ctx, args: args[-1],
-    'pass_index': lambda ctx, args: args[ctx.production.index],
-    'expr': lambda ctx, args, **kwargs: eval(ctx.production.expr, None, kwargs | {'ctx': ctx, 'args': args, 'kwargs': kwargs}),
-    'obj': lambda ctx, _, **kwargs: kwargs,
-    'pass_meta': lambda ctx, _, **kwargs: ctx.production.user_meta | kwargs,
-    'node': node_builder,
-    'unpack_node': node_unpack_builder,
-}, tables=parglare.LALR)
+print('Building parser')
+parser = parglare.GLRParser(grammar, lexical_disambiguation=False, actions=actions)
+
 try:
-    forest = parser.parse(test)
+    forest = parser.parse(input('Ready for input\n'))
     tree = forest.get_first_tree()
     parsed = parser.call_actions(tree)
 except parglare.ParseError as pe:
-    print(error.format_exc(pe), file=sys.stderr)
+    print(format_exc(pe, verbose_got=True), file=sys.stderr)
 else:
     pprint(parsed)

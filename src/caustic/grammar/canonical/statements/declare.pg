@@ -1,0 +1,20 @@
+import '../types.pg' ;
+import '../expressions/identifier.pg' ;
+import '../expressions/expressions.pg' ;
+
+
+declare_or_assign: Assignment {2} | Declaration {1} ;
+
+@node
+Declaration {10, node:'statements.Declaration'}: type=types.Type name=identifier.Identifier val=assignment? ;
+
+@node
+Assignment {11, node:'statements.Assignment'}: name=identifier.DottedIdentifier val=assignment ;
+
+@pass_last
+assignment: ASSIGN expressions.expression ;
+
+
+terminals
+
+ASSIGN: '=' ;

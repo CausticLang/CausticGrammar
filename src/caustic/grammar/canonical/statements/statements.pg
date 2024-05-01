@@ -1,0 +1,57 @@
+import './declare.pg' ;
+import './objects.pg' ;
+import '../block.pg' ;
+import '../procedure.pg' ;
+import '../expressions/expressions.pg' ;
+
+
+statement: objects.object | procedure.ProcedureStmt | declare.declare_or_assign {1}
+         | If | Elif | Else
+         | While | DoWhile | ForOf ;
+
+
+inner_body: block.Block | block.line ;
+
+// Conditional
+@node
+If {node:'statements.If'}: IF condition=expressions.expression body=inner_body? ;
+@node
+Elif {node:'statements.Elif'}: ELIF condition=expressions.expression body=inner_body? ;
+@node
+Else {node:'statements.Else'}: ELSE body=inner_body? ;
+
+// Loop
+@node
+While {node:'statements.While'}: WHILE condition=expressions.expression body=inner_body? ;
+@node
+DoWhile {node:'statements.DoWhile'}: DO body=inner_body? WHILE condition=expressions.expression ;
+
+@node
+For {node:'statements.For'}: FOR FOR_LEFT
+                             init=( expressions.expression | declare.Declaration )? block.LINE_END
+                             condition=expressions.expression? block.LINE_END
+                             foreach=expressions.expression?
+                             FOR_RIGHT body=inner_body? ;
+@node
+ForOf {node:'statements.ForOf'}: 
+     FOR iname=for_of_iname? name=declare.Declaration FOR_OF target=expressions.expression body=inner_body?
+   | FOR iname=for_of_iname name=none FOR_OF target=expressions.expression body=inner_body?
+   | FOR iname=none name=none FOR_OF target=expressions.expression body=inner_body? ;
+@pass_single
+for_of_iname: declare.Declaration FOR_OF_SEP ;
+
+@pass_none
+none: EMPTY ;
+
+
+terminals
+
+IF: 'if' ;
+ELIF: 'elif' ;
+ELSE: 'else' ;
+
+WHILE: 'while' ;
+FOR: 'for' ;
+FOR_LEFT: '(' ; FOR_RIGHT: ')' ;
+FOR_OF: 'of' ; FOR_OF_SEP: ',' ;
+DO: 'do' ;
