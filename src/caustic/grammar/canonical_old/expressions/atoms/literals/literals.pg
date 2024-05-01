@@ -1,6 +1,0 @@
-import './numeric.pg' ;
-import './string.pg' ;
-//import './fstring.pg' ;
-
-
-literal: numeric.Integer {4} | string.Bytes {3} /* | fstring.FString {2} */ | string.String {1} ;
