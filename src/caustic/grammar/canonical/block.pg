@@ -2,6 +2,7 @@ import './statements/statements.pg' ;
 import './expressions/expressions.pg' ;
 
 
+@pass_none
 empty_line: LINE_END ;
 
 @pass_single
