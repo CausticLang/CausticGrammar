@@ -1,6 +1,6 @@
 [project]
 name = "caustic.grammar"
-version = "2.0.1"
+version = "2.0.2"
 dependencies = ["caustic.cst", "caustic.parser"]
 requires-python = ">=3.12"
 authors = [{name="Shae.c32"}]
@@ -31,4 +31,4 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.package-data]
-"caustic.grammar" = ["**/*.pg"]
+"caustic.grammar" = ["**/*.pg", "**/*.pgt"]
