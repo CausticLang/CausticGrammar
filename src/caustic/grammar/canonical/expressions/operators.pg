@@ -25,7 +25,7 @@ Increment {34, node:'expressions.operators.Increment'}: target=expressions.expre
 Decrement {34, node:'expressions.operators.Decrement'}: target=expressions.expression DECREMENT ;
 
 
-binary_op: Subscription
+binary_op: Subscription | Invokation
          | Add | Sub | Mult | Div | Mod | Exp
          | EQ | NE | LT | LE | GT | GE | NullCoalescing
          | LogAnd | LogOr | LogXOr
@@ -34,13 +34,27 @@ binary_op: Subscription
 @node
 Subscription {33, node:'expressions.operators.Subscription'}:
     left=expressions.expression SUBSCRIPT_OPEN right=expressions.expression SUBSCRIPT_CLOSE ;
+// Invokation
+@proc_invokation
+Invokation {35}: target=expressions.expression INVOKE_OPEN args=args? INVOKE_CLOSE ;
+@proc_args
+args: args=arg+[ARG_SEP] kwargs=kwargs_part?
+    | kwargs=kwarg+[ARG_SEP] ;
+@pass_meta
+arg: val=expressions.expression {1, unpack:false}
+   | STAR val=expressions.expression {2, unpack:true} ;
+@pass_last
+kwargs_part: ARG_SEP kwarg+[ARG_SEP] ;
+kwarg: name=expressions.identifier.Identifier val=equals_expr ;
+@pass_last
+equals_expr: EQUALS expressions.expression ;
 // Arithmetic
 @node
 Add {30, node:'expressions.operators.Add'}: left=expressions.expression PLUS right=expressions.expression ;
 @node
 Sub {30, node:'expressions.operators.Sub'}: left=expressions.expression MINUS right=expressions.expression ;
 @node
-Mult {31, node:'expressions.operators.Mult'}: left=expressions.expression MULT right=expressions.expression ;
+Mult {31, node:'expressions.operators.Mult'}: left=expressions.expression STAR right=expressions.expression ;
 @node
 MMul {31, node:'expressions.operators.MMul'}: left=expressions.expression MMUL right=expressions.expression ;
 @node
@@ -96,13 +110,13 @@ terminals
 
 PLUS: '+' ;
 MINUS: '-' ;
+STAR: '*' ;
 
 LOGINVERT: '!' ;
 BITINVERT: '~' ;
 INCREMENT: '++' ;
 DECREMENT: '--' ;
 
-MULT: '*' ;
 MMUL: '@' ;
 DIV: '/' ;
 MOD: '%' ;
@@ -128,6 +142,13 @@ RSHIFT: '>>' ;
 
 SUBSCRIPT_OPEN: '[' ;
 SUBSCRIPT_CLOSE: ']' ;
+
+
+ARG_SEP: ',' ;
+EQUALS: '=' ;
+INVOKE_OPEN: '(' ;
+INVOKE_CLOSE: ')' ;
+
 
 TERNARYCOND_COND: '?' ;
 TERNARYCOND_SEP: ':' ;

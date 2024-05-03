@@ -1,16 +1,13 @@
 #!/bin/python3
 
 #> Imports
-import operator
 import parglare
-import itertools
 from caustic import cst
 #</Imports
 
 #> Header >/
 action = parglare.get_collector()
 
-# Declaration
 @action
 def proc_param(ctx, _, *, name: cst.expressions.atoms.Identifier, type: cst.typedecl.Type | None,
                default: cst.expressions.Expression | None = None) -> cst.procedure.Param:
@@ -42,25 +39,3 @@ def proc_expr(ctx, _, *, return_type: cst.typedecl.Type | None, params: dict | N
 def proc_stmt(ctx, _, *, name: cst.expressions.atoms.Identifier, return_type: cst.typedecl.Type | None, params: dict | None, body: cst.block.Block) -> cst.procedure.ProcedureExpr:
     return cst.procedure.ProcedureStmt(source=cst.SourceInfo.from_parglare_ctx(ctx),
                                        name=name, body=body, return_type=return_type, **(params or {'params': None}))
-
-# Invokation
-@action
-def proc_args(ctx, _, *, args: list[dict] | None = None, kwargs: list[dict] | None = None) -> dict:
-    pargs = {}
-    # Pos args
-    if args is not None:
-        pargs['args'] = []
-        pargs['unpack_args'] = set()
-        for i,a in enumerate(args):
-            pargs['args'].append(a['val'])
-            if a['unpack']: pargs['unpack_args'].add(i)
-    # KW args
-    if kwargs is not None:
-        pargs['kwargs'] = list(map(operator.itemgetter('name', 'val'), kwargs))
-    # Finish
-    return pargs
-
-@action
-def proc_invoke(ctx, _, *, target: cst.expressions.Expression, args: dict | None) -> cst.procedure.Invokation:
-    return cst.procedure.Invokation(source=cst.SourceInfo.from_parglare_ctx(ctx),
-                                    target=target, **(args or {}))
