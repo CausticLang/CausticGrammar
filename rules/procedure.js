@@ -2,6 +2,8 @@ module.exports = {
     // Declaration
     proc_expr: $ => seq($._PROC_PROC, field('type', $.IDENTIFIER),
                         $._PROC_OPEN, optional($._proc_params), $._PROC_CLOSE, field('body', $._body)),
+    proc_stmt: $ => prec.left(seq($._PROC_PROC, field('type', $.IDENTIFIER), field('name', $.IDENTIFIER),
+                              $._PROC_OPEN, optional($._proc_params), $._PROC_CLOSE, field('body', optional($._body)))),
 
     _proc_params: $ => seq(choice(
         seq($._proc_pos_params, optional(seq($._PROC_ARGSEP, $._proc__params)), optional(seq($._PROC_ARGSEP, $._proc_kw_params))),
