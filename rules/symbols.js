@@ -8,10 +8,16 @@ module.exports = {
     _LINE_END:             $ => ';',
 
     // Procedures
+    _PROC_PROC:            $ => 'proc',
     _PROC_OPEN:            $ => '(',
     _PROC_CLOSE:           $ => ')',
-    _PROC_KWARG:           $ => '=',
     _PROC_ARGSEP:          $ => ',',
+    /// Declaration
+    _PROC_DEFAULT:         $ => '=',
+    _PROC_POSONLY:         $ => '/',
+    _PROC_KWONLY:          $ => '*',
+    /// Invokation
+    _PROC_KWARG:           $ => '=',
 
     // Operators
     /// Subscription
