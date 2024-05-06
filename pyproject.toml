@@ -1,34 +1,29 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "caustic.grammar"
-version = "2.2.0"
-dependencies = ["caustic.cst", "caustic.parser"]
-requires-python = ">=3.12"
-authors = [{name="Shae.c32"}]
-maintainers = []
-description = "Caustic's default grammar"
-readme = "README.md"
-keywords = ['caustic', 'language', 'grammar']
+name = "tree-sitter-caustic"
+description = "Caustic grammar for tree-sitter"
+version = "0.0.1"
+keywords = ["incremental", "parsing", "tree-sitter", "caustic"]
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
-    "Natural Language :: English",
-    "Programming Language :: Other",
-    "Topic :: File Formats",
-    "Topic :: Software Development",
-    "Topic :: Software Development :: Compilers",
-    "Topic :: Software Development :: Interpreters",
-    "Topic :: Software Development :: Pre-processors",
-    "Topic :: Text Processing",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Software Development :: Compilers",
+  "Topic :: Text Processing :: Linguistic",
+  "Typing :: Typed"
 ]
+requires-python = ">=3.8"
+license.text = "MIT"
+readme = "README.md"
 
 [project.urls]
 Homepage = "https://codeberg.org/Caustic/CausticGrammar"
-Issues = "https://codeberg.org/Caustic/CausticGrammar/issues"
 
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+[project.optional-dependencies]
+core = ["tree-sitter~=0.21"]
 
-[tool.setuptools.package-data]
-"caustic.grammar" = ["**/*.pg", "**/*.pgt"]
+[tool.cibuildwheel]
+build = "cp38-*"
+build-frontend = "build"
