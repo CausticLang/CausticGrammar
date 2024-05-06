@@ -1,7 +1,17 @@
 module.exports = {
+    _PAREN_OPEN:           $ => '(',
+    _PAREN_CLOSE:          $ => ')',
+
+    // Block
     _BLOCK_OPEN:           $ => '{',
     _BLOCK_CLOSE:          $ => '}',
     _LINE_END:             $ => ';',
+
+    // Procedures
+    _PROC_OPEN:            $ => '(',
+    _PROC_CLOSE:           $ => ')',
+    _PROC_KWARG:           $ => '=',
+    _PROC_ARGSEP:          $ => ',',
 
     // Operators
     /// Subscription

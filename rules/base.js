@@ -9,12 +9,14 @@ module.exports = {
     ...require('./block.js'),
     ...require('./symbols.js'),
     ...require('./operators.js'),
+    ...require('./procedure.js'),
 
     _expression: $ => choice(
+        $._paren_expr,
         $.IDENTIFIER,
         $.attribute, $.subscript,
-        $._unary_ops,
-        $._binary_ops,
-        $._ternary_ops,
+        $._unary_ops, $._binary_ops, $._ternary_ops,
+        $.proc_invoke,
     ),
+    _paren_expr: $ => prec.left(999, seq($._PAREN_OPEN, $._expression, $._PAREN_CLOSE)),
 };
