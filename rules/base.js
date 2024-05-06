@@ -1,3 +1,7 @@
+/*
+    TODO: $._line can be matched even without $._LINE_END
+*/
+
 module.exports = {
     root: $ => repeat($._body),
 
