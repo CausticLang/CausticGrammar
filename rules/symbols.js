@@ -1,4 +1,8 @@
 module.exports = {
+    _BLOCK_OPEN:           $ => '{',
+    _BLOCK_CLOSE:          $ => '}',
+    _LINE_END:             $ => ';',
+
     // Operators
     /// Subscription
     _OP_ATTR:              $ => '.',

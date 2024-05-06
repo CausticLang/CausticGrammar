@@ -1,7 +1,8 @@
 module.exports = {
-    base: $ => $._expression,
+    root: $ => repeat($._body),
 
     ...require('./atoms.js'),
+    ...require('./block.js'),
     ...require('./symbols.js'),
     ...require('./operators.js'),
 
