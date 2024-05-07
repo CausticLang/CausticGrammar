@@ -5,12 +5,6 @@
 module.exports = {
     root: $ => repeat($._body),
 
-    ...require('./atoms.js'),
-    ...require('./block.js'),
-    ...require('./symbols.js'),
-    ...require('./operators.js'),
-    ...require('./procedure.js'),
-
     _expression: $ => choice(
         prec.left(999, seq($._PAREN_OPEN, $._expression, $._PAREN_CLOSE)),
         $.IDENTIFIER,
