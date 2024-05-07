@@ -5,16 +5,16 @@
 module.exports = {
     root: $ => repeat($._body),
 
-    _expression: $ => choice(
+    _expression: $ => prec.left(choice(
         prec.left(999, seq($._PAREN_OPEN, $._expression, $._PAREN_CLOSE)),
         $.IDENTIFIER,
         $.attribute, $.subscript,
         $._unary_ops, $._binary_ops, $._ternary_ops,
         $.proc_invoke, $.proc_expr,
-    ),
-    _statement: $ => choice(
+    )),
+    _statement: $ => prec.left(choice(
         $.proc_stmt,
-    ),
+    )),
 
     // note: keywords cannot begin with "_", given this
     // configuration
