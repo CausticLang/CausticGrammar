@@ -15,4 +15,12 @@ module.exports = {
     _statement: $ => choice(
         $.proc_stmt,
     ),
+
+    // note: keywords cannot begin with "_", given this
+    // configuration
+    _word: $ => /[a-z]\w*/i,
+
+    $: {
+        word: '_word',
+    },
 };
