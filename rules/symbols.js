@@ -61,4 +61,8 @@ module.exports = {
     /// Ternary
     _OP_TERNARY_CONDITION: $ => '?',
     _OP_TERNARY_DELIM:     $ => ':',
+
+    // Types
+    _SUBTYPE_OPEN:         $ => '<',
+    _SUBTYPE_CLOSE:        $ => '>',
 };

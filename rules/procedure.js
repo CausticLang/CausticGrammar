@@ -1,8 +1,8 @@
 module.exports = {
     // Declaration
-    proc_expr: $ => seq($._PROC_PROC, field('type', $.IDENTIFIER),
+    proc_expr: $ => seq($._PROC_PROC, field('type', $.type),
                         $._PROC_OPEN, optional($._proc_params), $._PROC_CLOSE, field('body', $._body)),
-    proc_stmt: $ => prec.left(seq($._PROC_PROC, field('type', $.IDENTIFIER), field('name', $.IDENTIFIER),
+    proc_stmt: $ => prec.left(seq($._PROC_PROC, field('type', $.type), field('name', $.IDENTIFIER),
                               $._PROC_OPEN, optional($._proc_params), $._PROC_CLOSE, field('body', optional($._body)))),
 
     _proc_params: $ => seq(choice(
@@ -19,7 +19,7 @@ module.exports = {
     _proc_kw_params: $ => prec.left(field('kw_params', seq($._PROC_KWONLY, $._PROC_ARGSEP, $.proc_params))),
 
     proc_params: $ => prec.left(seq($.proc_param, repeat(seq($._PROC_ARGSEP, $.proc_param)))),
-    proc_param: $ => seq(field('type', $.IDENTIFIER), field('name', $.IDENTIFIER), field('default', optional(seq($._PROC_DEFAULT, $._expression)))),
+    proc_param: $ => seq(field('type', $.type), field('name', $.IDENTIFIER), field('default', optional(seq($._PROC_DEFAULT, $._expression)))),
     // Invokation
     proc_invoke: $ => prec.left(seq(field('proc', $._expression), $._PROC_OPEN, field('args', optional($.proc_args)), $._PROC_CLOSE)),
     proc_args: $ => seq($.proc_arg, repeat(seq($._PROC_ARGSEP, $.proc_arg)), optional($._PROC_ARGSEP)),
