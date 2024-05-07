@@ -1,5 +1,0 @@
-*.so
-
-# Tree-sitter
-bindings/*
-src/*
