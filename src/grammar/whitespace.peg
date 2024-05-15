@@ -1,0 +1,5 @@
+_ws <- [ \t\r\n]+
+_ct <- '//' [^\n] '\n'
+     / '/*' ([^*] / ('*' [^/]))* '*/' ~ { _cap_ERROR("_ct", "Expected end of block comment"); }
+_ <- (_ws / _ct)*
+EOF <- !.

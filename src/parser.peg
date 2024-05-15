@@ -1,0 +1,22 @@
+%prefix "cap"
+%auxil "struct cst_Root*"
+%value "cst_index"
+
+%header {
+    #define PCC_AST_NODE_CUSTOM_DATA_DEFINED
+
+    #include "ast/cst.h"
+    #include "error.h"
+
+    #include "grammar/helper.h"
+}
+%source {
+    #include "ast/cst.c"
+    #include "error.c"
+}
+
+_start <- n:expression { $$ = n; }
+
+%import "grammar/whitespace.peg"
+%import "grammar/atoms.peg"
+%import "grammar/expression.peg"
