@@ -8,7 +8,7 @@ _ct <-
             $$ = 0;
             return;
         }
-        _cap_ADDNODE(_cap_MKINITNODE(ExtraData, "comment:oneline", _cap_COPYSTR($1), true));
+        _cap_ADDNODE(_cap_MKINITNODE(ExtraData, "comment:oneline", _cap_COPYSTR($1)));
         $$ = _cap_LASTNODE;
     }
    / '/*' <(NEWLINE / [^*] / ('*' [^/]))*> '*/' ~ { _cap_ERROR("_ct", "Expected end of block comment"); } {
@@ -16,7 +16,7 @@ _ct <-
             $$ = 0;
             return;
         }
-        _cap_ADDNODE(_cap_MKINITNODE(ExtraData, "comment:multiline", _cap_COPYSTR($2), true));
+        _cap_ADDNODE(_cap_MKINITNODE(ExtraData, "comment:multiline", _cap_COPYSTR($2)));
         $$ = _cap_LASTNODE;
     }
 _ <- (_ws / _ct)*

@@ -16,7 +16,7 @@ enum <-
     {
         cap_ps_push(auxil);
         auxil->stack->mark = ENUM_BODY;
-        auxil->stack->data = _cap_MKINITNODE(Enum, n, b, NULL, 0);
+        auxil->stack->data = _cap_MKINITNODE(Enum, n, b);
     }
     _ ( enum_member _ )*
     _ '}' ~ { _cap_ERROR("enum", "Expected closing '}'"); } {
@@ -28,10 +28,11 @@ enum_member <-
     ( _ '=' _ v:expression ~ { _cap_ERROR("enum_member", "Expected expression after '='"); } )?
     _ EOL ~ { _cap_ERROR("enum_member", "Expected EOL ';' after enum member"); } {
         assert(auxil->stack->mark == ENUM_BODY);
-        struct cst_nEnum* en = auxil->stack->data;
-        en->members = realloc(en->members, (++en->member_count) * sizeof(struct cst_nEnum_Member));
-        en->members[en->member_count-1].name = n;
-        en->members[en->member_count-1].val = v;
+        cst_nEnum* en = auxil->stack->data;
+        en->members = realloc(en->members, (++en->n_members) * sizeof(cst_nEnum_Member));
+        *(en->members[en->n_members-1]) = (cst_nEnum_Member)CST__TYPES__ENUM_MEMBER__INIT;
+        en->members[en->n_members-1]->name = n;
+        en->members[en->n_members-1]->val = v;
     }
 
 struct <-
@@ -44,7 +45,7 @@ struct_inner <-
     {
         cap_ps_push(auxil);
         auxil->stack->mark = STRUCT_BODY;
-        auxil->stack->data = _cap_MKINITNODE(Struct, n, b, NULL, 0);
+        auxil->stack->data = _cap_MKINITNODE(Struct, n, b);
     }
     _ ( struct_member _ )*
     _ '}' ~ { _cap_ERROR("struct_inner", "Expected closing '}'"); } {
@@ -57,11 +58,12 @@ struct_member <-
     ( _ '=' _ v:expression ~ { _cap_ERROR("struct_member", "Expected expression after '='"); } )?
     _ EOL ~ { _cap_ERROR("struct_member", "Expected EOL ';' after struct member"); } {
         assert(auxil->stack->mark == STRUCT_BODY);
-        struct cst_nStruct* st = auxil->stack->data;
-        st->members = realloc(st->members, (++st->member_count) * sizeof(struct cst_nStruct_Member));
-        st->members[st->member_count-1].type = t;
-        st->members[st->member_count-1].name = n;
-        st->members[st->member_count-1].val = v;
+        cst_nStruct* st = auxil->stack->data;
+        st->members = realloc(st->members, (++st->n_members) * sizeof(cst_nStruct_Member));
+        *(st->members[st->n_members-1]) = (cst_nStruct_Member)CST__TYPES__STRUCT_MEMBER__INIT;
+        st->members[st->n_members-1]->type = t;
+        st->members[st->n_members-1]->name = n;
+        st->members[st->n_members-1]->val = v;
     }
 
 structenum <-
@@ -70,7 +72,7 @@ structenum <-
       _ '>' ~ { _cap_ERROR("structenum", "Expected closing '>'"); } )? {
         cap_ps_push(auxil);
         auxil->stack->mark = STRUCTENUM_BODY;
-        auxil->stack->data = _cap_MKINITNODE(StructEnum, n, b, NULL, 0);
+        auxil->stack->data = _cap_MKINITNODE(StructEnum, n, b);
     }
     _ '{' ~ { _cap_ERROR("structenum", "Expected '{'"); }
     _ ( structenum_member _ )*
@@ -82,9 +84,9 @@ structenum <-
 structenum_member <-
     s:struct_inner _ EOL ~ { _cap_ERROR("structenum_member", "Expected EOL ';' after tagged-union member"); } {
         assert(auxil->stack->mark == STRUCTENUM_BODY);
-        struct cst_nStructEnum* es = auxil->stack->data;
-        es->members = realloc(es->members, (++es->member_count) * sizeof(cst_index));
-        es->members[es->member_count-1] = s;
+        cst_nStructEnum* es = auxil->stack->data;
+        es->members = realloc(es->members, (++es->n_members) * sizeof(cst_index));
+        es->members[es->n_members-1] = s;
     }
 
 class <-
@@ -93,7 +95,7 @@ class <-
       _ '>' ~ { _cap_ERROR("class", "Expected closing '>'"); } )? {
         cap_ps_push(auxil);
         auxil->stack->mark = CLASS_BODY;
-        auxil->stack->data = _cap_MKINITNODE(Class, n, b, NULL, 0);
+        auxil->stack->data = _cap_MKINITNODE(Class, n, b);
     }
     _ '{' ~ { _cap_ERROR("class", "Expected '{'"); }
     _ ( class_member _ )*
@@ -107,7 +109,7 @@ class_member <-
   / class_instance_method / class_instance_member
   / EOL {
         if (auxil->config.track_empty_lines)
-            _cap_ADDNODE(_cap_MKINITNODE(ExtraData, "blank_eol:class_member", NULL, true));
+            _cap_ADDNODE(_cap_MKINITNODE(ExtraData, "blank_eol:class_member", NULL));
     }
 
 class_instance_member <-
@@ -115,11 +117,13 @@ class_instance_member <-
     ( _ '=' _ v:expression ~ { _cap_ERROR("class_instance_member", "Expected expression after '='"); } )?
     _ EOL ~ { _cap_ERROR("class_instance_member", "Expected EOL ';' after class member"); } {
         assert(auxil->stack->mark == CLASS_BODY);
-        struct cst_nClass* cls = auxil->stack->data;
-        cls->members = realloc(cls->members, (++cls->member_count) * sizeof(struct cst_nClass_Member*));
-        cls->members[cls->member_count-1].is_static = false;
-        cls->members[cls->member_count-1].is_method = false;
-        struct cst_nStruct_Member* sm = cls->members[cls->member_count-1].member = malloc(sizeof(struct cst_nStruct_Member));
+        cst_nClass* cls = auxil->stack->data;
+        cls->members = realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member*));
+        *(cls->members[cls->n_members-1]) = (cst_nClass_Member)CST__TYPES__CLASS_MEMBER__INIT;
+        cls->members[cls->n_members-1]->is_static = false;
+        cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_MEMBER;
+        cst_nStruct_Member* sm = cls->members[cls->n_members-1]->member = malloc(sizeof(cst_nStruct_Member));
+        *sm = (cst_nStruct_Member)CST__TYPES__CLASS_MEMBER__INIT;
         sm->type = t; sm->name = n; sm->val = v;
     }
 class_class_member <-
@@ -127,27 +131,31 @@ class_class_member <-
     ( _ '=' _ v:expression ~ { _cap_ERROR("class_class_member", "Expected expression after '='"); } )?
     _ EOL ~ { _cap_ERROR("class_class_member", "Expected EOL ';' after class member"); } {
         assert(auxil->stack->mark == CLASS_BODY);
-        struct cst_nClass* cls = auxil->stack->data;
-        cls->members = realloc(cls->members, (++cls->member_count) * sizeof(struct cst_nClass_Member));
-        cls->members[cls->member_count-1].is_static = true;
-        cls->members[cls->member_count-1].is_method = false;
-        struct cst_nStruct_Member* sm = cls->members[cls->member_count-1].member = malloc(sizeof(struct cst_nStruct_Member));
+        cst_nClass* cls = auxil->stack->data;
+        cls->members = realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member*));
+        *(cls->members[cls->n_members-1]) = (cst_nClass_Member)CST__TYPES__CLASS_MEMBER__INIT;
+        cls->members[cls->n_members-1]->is_static = true;
+        cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_MEMBER;
+        cst_nStruct_Member* sm = cls->members[cls->n_members-1]->member = malloc(sizeof(cst_nStruct_Member));
+        *sm = (cst_nStruct_Member)CST__TYPES__CLASS_MEMBER__INIT;
         sm->type = t; sm->name = n; sm->val = v;
     }
 
 class_instance_method <- p:proc_stmt {
     assert(auxil->stack->mark = CLASS_BODY);
-    struct cst_nClass* cls = auxil->stack->data;
-    cls->members = realloc(cls->members, (++cls->member_count) * sizeof(struct cst_nClass_Member));
-    cls->members[cls->member_count-1].is_static = false;
-    cls->members[cls->member_count-1].is_method = true;
-    cls->members[cls->member_count-1].method = p;
+    cst_nClass* cls = auxil->stack->data;
+    cls->members = realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member));
+    *(cls->members[cls->n_members-1]) = (cst_nClass_Member)CST__TYPES__CLASS_MEMBER__INIT;
+    cls->members[cls->n_members-1]->is_static = false;
+    cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_METHOD;
+    cls->members[cls->n_members-1]->method = p;
 }
 class_class_method <- p:proc_stmt {
     assert(auxil->stack->mark = CLASS_BODY);
-    struct cst_nClass* cls = auxil->stack->data;
-    cls->members = realloc(cls->members, (++cls->member_count) * sizeof(struct cst_nClass_Member));
-    cls->members[cls->member_count-1].is_static = true;
-    cls->members[cls->member_count-1].is_method = true;
-    cls->members[cls->member_count-1].method = p;
+    cst_nClass* cls = auxil->stack->data;
+    cls->members = realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member));
+    *(cls->members[cls->n_members-1]) = (cst_nClass_Member)CST__TYPES__CLASS_MEMBER__INIT;
+    cls->members[cls->n_members-1]->is_static = true;
+    cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_METHOD;
+    cls->members[cls->n_members-1]->method = p;
 }

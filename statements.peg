@@ -26,18 +26,18 @@ illegal_stmt <-
 if_stmt <-
     IF_KW _ c:expression _ b:body
     _ ( n:elif_stmt / n:else_stmt ) {
-        _cap_ADDNODE(_cap_MKINITNODE(IfStmt, c, b, n));
+        _cap_ADDNODE(_cap_MKINITNODE(If, c, b, n));
         $$ = _cap_LASTNODE;
     }
 elif_stmt <-
     ELIF_KW _ c:expression _ b:body
     _ ( n:elif_stmt / n:else_stmt ) {
-        _cap_ADDNODE(_cap_MKINITNODE(ElIfStmt, c, b, n));
+        _cap_ADDNODE(_cap_MKINITNODE(ElIf, c, b, n));
         $$ = _cap_LASTNODE;
     }
 else_stmt <-
     ELSE_KW _ b:body {
-        _cap_ADDNODE(_cap_MKINITNODE(ElseStmt, b));
+        _cap_ADDNODE(_cap_MKINITNODE(Else, b));
         $$ = _cap_LASTNODE;
     }
 
@@ -51,20 +51,20 @@ for_stmt <-
     _ EOL?
     _ ')' ~ { _cap_ERROR("for_stmt", "Expected closing ')'"); }
     _ ( body:body / EOL ) ~ { _cap_ERROR("for_stmt", "Expected for body or EOL ';'"); } {
-        _cap_ADDNODE(_cap_MKINITNODE(ForStmt, init, cond, iter, body));
+        _cap_ADDNODE(_cap_MKINITNODE(For, init, cond, iter, body));
         $$ = _cap_LASTNODE;
     }
 
 while_stmt <-
     c:while_cond _ ( b:body / EOL ) ~ { _cap_ERROR("while_stmt", "Expected while body or EOL ';'"); } {
-        _cap_ADDNODE(_cap_MKINITNODE(WhileStmt, c, b, false));
+        _cap_ADDNODE(_cap_MKINITNODE(While, c, b, false));
         $$ = _cap_LASTNODE;
     }
 
 dowhile_stmt <-
     DO_KW _ b:body ~ { _cap_ERROR("dowhile_stmt", "Expected do-while body after 'do'"); }
     _ c:while_cond ~ { _cap_ERROR("dowhile_stmt", "Expected 'while'"); } {
-        _cap_ADDNODE(_cap_MKINITNODE(WhileStmt, c, b, true));
+        _cap_ADDNODE(_cap_MKINITNODE(While, c, b, true));
         $$ = _cap_LASTNODE;
     }
 
@@ -73,23 +73,23 @@ while_cond <-
 
 
 pass_stmt <- PASS_KW {
-    _cap_ADDNODE(cst_ninit_PassStmt(_cap_MKNODE(PassStmt), $0s, $0e, cap_lno(auxil), cap_cno(auxil, $0s)));
+    _cap_ADDNODE(cst_binit_Pass(malloc(sizeof(cst_Node)), cst_ninit_Pass(_cap_MKNODE(Pass)), $0s, $0e, cap_lno(auxil), cap_cno(auxil, $0s)));
     $$ = _cap_LASTNODE;
 }
 
 flowctl_stmt <-
     BREAK_KW {
-        _cap_ADDNODE(_cap_MKINITNODE(FlowControlStmt, BREAK));
+        _cap_ADDNODE(_cap_MKINITNODE(FlowCtl, CST__STATEMENTS__FLOW_CTL_TYPE__BREAK));
         $$ = _cap_LASTNODE;
     }
   / CONTINUE_KW {
-        _cap_ADDNODE(_cap_MKINITNODE(FlowControlStmt, CONTINUE));
+        _cap_ADDNODE(_cap_MKINITNODE(FlowCtl, CST__STATEMENTS__FLOW_CTL_TYPE__CONTINUE));
         $$ = _cap_LASTNODE;
     }
 
 return_stmt <-
     RETURN_KW _ v:expression? {
-        _cap_ADDNODE(_cap_MKINITNODE(ReturnStmt, v));
+        _cap_ADDNODE(_cap_MKINITNODE(Return, v));
         $$ = _cap_LASTNODE;
     }
 

@@ -5,14 +5,26 @@ proc_expr <-
     _ '>' ~ { _cap_ERROR("proc_expr", "Expected closing '>'"); }
     {
         cap_ps_push(auxil);
+        auxil->stack->mark = PROC_EXPR;
+        auxil->stack->data = cst_binit_ProcExpr((cst_Node*)malloc(sizeof(cst_Node)),
+                                                cst_ninit_ProcExpr((cst_nProcExpr*)malloc(sizeof(cst_nProcExpr)), t, 0),
+                                                $0s, $0e, cap_lno(auxil), cap_cno(auxil, $0s));
+        cap_ps_push(auxil);
         auxil->stack->mark = PROC_PARAMS;
-        auxil->stack->data = cst_ninit_ProcExpr((struct cst_nProcExpr*)malloc(sizeof(struct cst_nProcExpr)), $0s, $0e, cap_lno(auxil), cap_cno(auxil, $0s), t, NULL, 0, 0);
+        auxil->stack->data = NULL;
+        auxil->stack->auxcount = 0;
     }
     _ '(' _ proc_params? _ ')' ~ { _cap_ERROR("proc_expr", "Expected closing ')'"); }
     _ b:body ~ { _cap_ERROR("proc_expr", "Body is required for procedure expressions"); } {
-        struct cst_nProcExpr* pexpr = cap_ps_pop(auxil);
-        pexpr->body = b;
-        _cap_ADDNODE(pexpr);
+        assert(auxil->stack->mark == PROC_PARAMS);
+        unsigned int n_params = auxil->stack->auxcount;
+        cst_ProcParam** params = cap_ps_pop(auxil);
+        assert(auxil->stack->mark == PROC_EXPR);
+        cst_Node* node = cap_ps_pop(auxil);
+        cst_NODECAST(node, ProcExpr)->params = params;
+        cst_NODECAST(node, ProcExpr)->n_params = n_params;
+        cst_NODECAST(node, ProcExpr)->body = b;
+        _cap_ADDNODE(node);
         $$ = _cap_LASTNODE;
     }
 
@@ -24,14 +36,26 @@ proc_stmt <-
     _ n:identifier ~ { _cap_ERROR("proc_stmt", "Expected identifier after procedure statement type"); }
     {
         cap_ps_push(auxil);
+        auxil->stack->mark = PROC_STMT;
+        auxil->stack->data = cst_binit_ProcStmt((cst_Node*)malloc(sizeof(cst_Node)),
+                                                cst_ninit_ProcStmt((cst_nProcStmt*)malloc(sizeof(cst_nProcExpr)), n, t, 0),
+                                                $0s, $0e, cap_lno(auxil), cap_cno(auxil, $0s));
+        cap_ps_push(auxil);
         auxil->stack->mark = PROC_PARAMS;
-        auxil->stack->data = cst_ninit_ProcStmt((struct cst_nProcStmt*)malloc(sizeof(struct cst_nProcStmt)), $0s, $0e, cap_lno(auxil), cap_cno(auxil, $0s), n, t, NULL, 0, 0);
+        auxil->stack->data = NULL;
+        auxil->stack->auxcount = 0;
     }
     _ '(' _ proc_params? _ ')' ~ { _cap_ERROR("proc_stmt", "Expected closing ')'"); }
     _ b:body? {
-        struct cst_nProcStmt* pstmt = cap_ps_pop(auxil);
-        pstmt->body = b;
-        _cap_ADDNODE(pstmt);
+        assert(auxil->stack->mark == PROC_PARAMS);
+        unsigned int n_params = auxil->stack->auxcount;
+        cst_ProcParam** params = cap_ps_pop(auxil);
+        assert(auxil->stack->mark == PROC_STMT);
+        cst_Node* node = cap_ps_pop(auxil);
+        cst_NODECAST(node, ProcStmt)->params = params;
+        cst_NODECAST(node, ProcStmt)->n_params = n_params;
+        cst_NODECAST(node, ProcStmt)->body = b;
+        _cap_ADDNODE(node);
         $$ = _cap_LASTNODE;
     }
 
@@ -56,27 +80,25 @@ proc_kwonly_params <-
 proc_posonly_param <-
     t:type _ n:identifier ~ { _cap_ERROR("proc_posonly_param", "Expected identifier"); }
     ( _ '=' _ d:expression ~ { _cap_ERROR("proc_posonly_param", "Expected expression after '='"); } {
-        assert(auxil->stack->mark == PROC_PARAMS);
-        cst_PROC_ADD_PARAM((struct cst_nProcExpr*)(auxil->stack->data), POS_ONLY, t, n, true, d); }
+        _cap_ADDPARAM(POS_ONLY, t, n, d); }
     / {
-        assert(auxil->stack->mark == PROC_PARAMS);
-        cst_PROC_ADD_PARAM((struct cst_nProcExpr*)(auxil->stack->data), POS_ONLY, t, n, false, 0);
+        _cap_ADDPARAM(POS_ONLY, t, n, 0);
       } )
 proc_posorkw_param <-
     t:type _ n:identifier ~ { _cap_ERROR("proc_posorkw_param", "Expected identifier"); }
     ( _ '=' _ d:expression ~ { _cap_ERROR("proc_posorkw_param", "Expected expression after '='"); } {
-        assert(auxil->stack->mark == PROC_PARAMS);
-        cst_PROC_ADD_PARAM((struct cst_nProcExpr*)(auxil->stack->data), POS_OR_KW, t, n, true, d); }
+        _cap_ADDPARAM(POS_OR_KW, t, n, d); }
     / {
-        assert(auxil->stack->mark == PROC_PARAMS);
-        cst_PROC_ADD_PARAM((struct cst_nProcExpr*)(auxil->stack->data), POS_OR_KW, t, n, false, 0);
+        _cap_ADDPARAM(POS_OR_KW, t, n, 0);
       } )
 proc_kwonly_param <-
     t:type _ n:identifier ~ { _cap_ERROR("proc_kwonly_param", "Expected identifier"); }
     ( _ '=' _ d:expression ~ { _cap_ERROR("proc_kwonly_param", "Expected expression after '='"); } {
-        assert(auxil->stack->mark == PROC_PARAMS);
-        cst_PROC_ADD_PARAM((struct cst_nProcExpr*)(auxil->stack->data), KW_ONLY, t, n, true, d); }
+        /*assert(auxil->stack->mark == PROC_PARAMS);
+        cst_PROC_ADD_PARAM((cst_nProcExpr*)(auxil->stack->data), KW_ONLY, t, n, true, d); }*/
+        _cap_ADDPARAM(KW_ONLY, t, n, d); }
     / {
-        assert(auxil->stack->mark == PROC_PARAMS);
-        cst_PROC_ADD_PARAM((struct cst_nProcExpr*)(auxil->stack->data), KW_ONLY, t, n, false, 0);
+        /*assert(auxil->stack->mark == PROC_PARAMS);
+        cst_PROC_ADD_PARAM((cst_nProcExpr*)(auxil->stack->data), KW_ONLY, t, n, false, 0);*/
+        _cap_ADDPARAM(KW_ONLY, t, n, 0);
       } )

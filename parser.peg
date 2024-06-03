@@ -5,7 +5,7 @@
 %header {
     #include "./src/parser_state.h"
     //#include "../error.h"
-    #include "./src/ast/cst.h"
+    #include "./src/ast/nodes.h"
 
     #include "./src/grammar/helper.h"
 
@@ -16,17 +16,17 @@
 %source {
     #include "./src/parser_state.c"
     #include "./src/error.h"
-    #include "./src/ast/cst.c"
+    #include "./src/ast/nodes.c"
 }
 
 _start <-
     { $$ = 0; _cap_ADDNODE(_cap_MKINITNODE(Entrypoint, 0, 0)); }
     _ n:block_inner {
-        cst_NODECAST(Entrypoint, auxil->root->nodes[0])->node = n;
+        cst_NODECAST(auxil->root->nodes[0], Entrypoint)->node = n;
         auxil->root->nodes[0]->pos_end = $0e;
     }
     _ EOF ~ { _cap_ERROR("_start", "Expected EOF"); } {
-        cst_NODECAST(Entrypoint, auxil->root->nodes[0])->eof_pos = $0e;
+        cst_NODECAST(auxil->root->nodes[0], Entrypoint)->eof_pos = $0e;
     }
 
 %import "grammar/access.peg"
