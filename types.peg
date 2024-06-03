@@ -126,7 +126,7 @@ class_instance_member <-
         cls->members[cls->n_members-1]->is_static = false;
         cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_MEMBER;
         cst_nStruct_Member* sm = cls->members[cls->n_members-1]->member = malloc(sizeof(cst_nStruct_Member));
-        *sm = (cst_nStruct_Member)CST__TYPES__CLASS_MEMBER__INIT;
+        *sm = (cst_nStruct_Member)CST__TYPES__STRUCT_MEMBER__INIT;
         sm->type = t; sm->name = n; sm->val = v;
     }
 class_class_member <-
@@ -141,7 +141,7 @@ class_class_member <-
         cls->members[cls->n_members-1]->is_static = true;
         cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_MEMBER;
         cst_nStruct_Member* sm = cls->members[cls->n_members-1]->member = malloc(sizeof(cst_nStruct_Member));
-        *sm = (cst_nStruct_Member)CST__TYPES__CLASS_MEMBER__INIT;
+        *sm = (cst_nStruct_Member)CST__TYPES__STRUCT_MEMBER__INIT;
         sm->type = t; sm->name = n; sm->val = v;
     }
 
