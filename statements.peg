@@ -73,7 +73,7 @@ while_cond <-
 
 
 pass_stmt <- PASS_KW {
-    _cap_ADDNODE(cst_binit_Pass(malloc(sizeof(cst_Node)), cst_ninit_Pass(_cap_MKNODE(Pass)), $0s, $0e, cap_lno(auxil), cap_cno(auxil, $0s)));
+    _cap_ADDNODE(cst_binit_Pass((cst_Node*)malloc(sizeof(cst_Node)), cst_ninit_Pass(_cap_MKNODE(Pass)), $0s, $0e, cap_lno(auxil), cap_cno(auxil, $0s)));
     $$ = _cap_LASTNODE;
 }
 

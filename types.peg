@@ -20,7 +20,7 @@ enum <-
     }
     _ ( enum_member _ )*
     _ '}' ~ { _cap_ERROR("enum", "Expected closing '}'"); } {
-        _cap_ADDNODE(cap_ps_pop(auxil));
+        _cap_ADDNODE((cst_Node*)cap_ps_pop(auxil));
         $$ = _cap_LASTNODE;
     }
 enum_member <-
@@ -29,8 +29,8 @@ enum_member <-
     _ EOL ~ { _cap_ERROR("enum_member", "Expected EOL ';' after enum member"); } {
         assert(auxil->stack->mark == ENUM_BODY);
         cst_nEnum* en = cst_NODECAST((cst_Node*)auxil->stack->data, Enum);
-        en->members = realloc(en->members, (++en->n_members) * sizeof(cst_nEnum_Member*));
-        en->members[en->n_members-1] = malloc(sizeof(cst_nEnum_Member));
+        en->members = (cst_nEnum_Member**)realloc(en->members, (++en->n_members) * sizeof(cst_nEnum_Member*));
+        en->members[en->n_members-1] = (cst_nEnum_Member*)malloc(sizeof(cst_nEnum_Member));
         *(en->members[en->n_members-1]) = (cst_nEnum_Member)CST__TYPES__ENUM_MEMBER__INIT;
         en->members[en->n_members-1]->name = n;
         en->members[en->n_members-1]->val = v;
@@ -50,7 +50,7 @@ struct_inner <-
     }
     _ ( struct_member _ )*
     _ '}' ~ { _cap_ERROR("struct_inner", "Expected closing '}'"); } {
-        _cap_ADDNODE(cap_ps_pop(auxil));
+        _cap_ADDNODE((cst_Node*)cap_ps_pop(auxil));
         $$ = _cap_LASTNODE;
     }
 struct_member <-
@@ -60,8 +60,8 @@ struct_member <-
     _ EOL ~ { _cap_ERROR("struct_member", "Expected EOL ';' after struct member"); } {
         assert(auxil->stack->mark == STRUCT_BODY);
         cst_nStruct* st = cst_NODECAST((cst_Node*)auxil->stack->data, Struct);
-        st->members = realloc(st->members, (++st->n_members) * sizeof(cst_nStruct_Member*));
-        st->members[st->n_members-1] = malloc(sizeof(cst_nStruct_Member));
+        st->members = (cst_nStruct_Member**)realloc(st->members, (++st->n_members) * sizeof(cst_nStruct_Member*));
+        st->members[st->n_members-1] = (cst_nStruct_Member*)malloc(sizeof(cst_nStruct_Member));
         *(st->members[st->n_members-1]) = (cst_nStruct_Member)CST__TYPES__STRUCT_MEMBER__INIT;
         st->members[st->n_members-1]->type = t;
         st->members[st->n_members-1]->name = n;
@@ -79,7 +79,7 @@ structenum <-
     _ '{' ~ { _cap_ERROR("structenum", "Expected '{'"); }
     _ ( structenum_member _ )*
     _ '}' ~ { _cap_ERROR("structenum", "Expected closing '}'"); } {
-        _cap_ADDNODE(cap_ps_pop(auxil));
+        _cap_ADDNODE((cst_Node*)cap_ps_pop(auxil));
         $$ = _cap_LASTNODE;
     }
 
@@ -87,7 +87,7 @@ structenum_member <-
     s:struct_inner _ EOL ~ { _cap_ERROR("structenum_member", "Expected EOL ';' after tagged-union member"); } {
         assert(auxil->stack->mark == STRUCTENUM_BODY);
         cst_nStructEnum* es = cst_NODECAST((cst_Node*)auxil->stack->data, StructEnum);
-        es->members = realloc(es->members, (++es->n_members) * sizeof(cst_index));
+        es->members = (cst_index*)realloc(es->members, (++es->n_members) * sizeof(cst_index));
         es->members[es->n_members-1] = s;
     }
 
@@ -102,7 +102,7 @@ class <-
     _ '{' ~ { _cap_ERROR("class", "Expected '{'"); }
     _ ( class_member _ )*
     _ '}' ~ { _cap_ERROR("class", "Expected closing '}'"); } {
-        _cap_ADDNODE(cap_ps_pop(auxil));
+        _cap_ADDNODE((cst_Node*)cap_ps_pop(auxil));
         $$ = _cap_LASTNODE;
     }
 
@@ -120,12 +120,12 @@ class_instance_member <-
     _ EOL ~ { _cap_ERROR("class_instance_member", "Expected EOL ';' after class member"); } {
         assert(auxil->stack->mark == CLASS_BODY);
         cst_nClass* cls = cst_NODECAST((cst_Node*)auxil->stack->data, Class);
-        cls->members = realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member*));
-        cls->members[cls->n_members-1] = malloc(sizeof(cst_nClass_Member));
+        cls->members = (cst_nClass_Member**)realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member*));
+        cls->members[cls->n_members-1] = (cst_nClass_Member*)malloc(sizeof(cst_nClass_Member));
         *(cls->members[cls->n_members-1]) = (cst_nClass_Member)CST__TYPES__CLASS_MEMBER__INIT;
         cls->members[cls->n_members-1]->is_static = false;
         cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_MEMBER;
-        cst_nStruct_Member* sm = cls->members[cls->n_members-1]->member = malloc(sizeof(cst_nStruct_Member));
+        cst_nStruct_Member* sm = cls->members[cls->n_members-1]->member = (cst_nStruct_Member*)malloc(sizeof(cst_nStruct_Member));
         *sm = (cst_nStruct_Member)CST__TYPES__STRUCT_MEMBER__INIT;
         sm->type = t; sm->name = n; sm->val = v;
     }
@@ -135,12 +135,12 @@ class_class_member <-
     _ EOL ~ { _cap_ERROR("class_class_member", "Expected EOL ';' after class member"); } {
         assert(auxil->stack->mark == CLASS_BODY);
         cst_nClass* cls = cst_NODECAST((cst_Node*)auxil->stack->data, Class);
-        cls->members = realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member*));
-        cls->members[cls->n_members-1] = malloc(sizeof(cst_nClass_Member));
+        cls->members = (cst_nClass_Member**)realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member*));
+        cls->members[cls->n_members-1] = (cst_nClass_Member*)malloc(sizeof(cst_nClass_Member));
         *(cls->members[cls->n_members-1]) = (cst_nClass_Member)CST__TYPES__CLASS_MEMBER__INIT;
         cls->members[cls->n_members-1]->is_static = true;
         cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_MEMBER;
-        cst_nStruct_Member* sm = cls->members[cls->n_members-1]->member = malloc(sizeof(cst_nStruct_Member));
+        cst_nStruct_Member* sm = cls->members[cls->n_members-1]->member = (cst_nStruct_Member*)malloc(sizeof(cst_nStruct_Member));
         *sm = (cst_nStruct_Member)CST__TYPES__STRUCT_MEMBER__INIT;
         sm->type = t; sm->name = n; sm->val = v;
     }
@@ -148,8 +148,8 @@ class_class_member <-
 class_instance_method <- p:proc_stmt {
     assert(auxil->stack->mark == CLASS_BODY);
     cst_nClass* cls = cst_NODECAST((cst_Node*)auxil->stack->data, Class);
-    cls->members = realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member));
-    cls->members[cls->n_members-1] = malloc(sizeof(cst_nClass_Member));
+    cls->members = (cst_nClass_Member**)realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member));
+    cls->members[cls->n_members-1] = (cst_nClass_Member*)malloc(sizeof(cst_nClass_Member));
     *(cls->members[cls->n_members-1]) = (cst_nClass_Member)CST__TYPES__CLASS_MEMBER__INIT;
     cls->members[cls->n_members-1]->is_static = false;
     cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_METHOD;
@@ -158,8 +158,8 @@ class_instance_method <- p:proc_stmt {
 class_class_method <- p:proc_stmt {
     assert(auxil->stack->mark == CLASS_BODY);
     cst_nClass* cls = cst_NODECAST((cst_Node*)auxil->stack->data, Class);
-    cls->members = realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member));
-    cls->members[cls->n_members-1] = malloc(sizeof(cst_nClass_Member));
+    cls->members = (cst_nClass_Member**)realloc(cls->members, (++cls->n_members) * sizeof(cst_nClass_Member));
+    cls->members[cls->n_members-1] = (cst_nClass_Member*)malloc(sizeof(cst_nClass_Member));
     *(cls->members[cls->n_members-1]) = (cst_nClass_Member)CST__TYPES__CLASS_MEMBER__INIT;
     cls->members[cls->n_members-1]->is_static = true;
     cls->members[cls->n_members-1]->val_case = CST__TYPES__CLASS_MEMBER__VAL_METHOD;

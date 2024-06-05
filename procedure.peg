@@ -18,9 +18,9 @@ proc_expr <-
     _ b:body ~ { _cap_ERROR("proc_expr", "Body is required for procedure expressions"); } {
         assert(auxil->stack->mark == PROC_PARAMS);
         unsigned int n_params = auxil->stack->auxcount;
-        cst_ProcParam** params = cap_ps_pop(auxil);
+        cst_ProcParam** params = (cst_ProcParam**)cap_ps_pop(auxil);
         assert(auxil->stack->mark == PROC_EXPR);
-        cst_Node* node = cap_ps_pop(auxil);
+        cst_Node* node = (cst_Node*)cap_ps_pop(auxil);
         cst_NODECAST(node, ProcExpr)->params = params;
         cst_NODECAST(node, ProcExpr)->n_params = n_params;
         cst_NODECAST(node, ProcExpr)->body = b;
@@ -49,9 +49,9 @@ proc_stmt <-
     _ b:body? {
         assert(auxil->stack->mark == PROC_PARAMS);
         unsigned int n_params = auxil->stack->auxcount;
-        cst_ProcParam** params = cap_ps_pop(auxil);
+        cst_ProcParam** params = (cst_ProcParam**)cap_ps_pop(auxil);
         assert(auxil->stack->mark == PROC_STMT);
-        cst_Node* node = cap_ps_pop(auxil);
+        cst_Node* node = (cst_Node*)cap_ps_pop(auxil);
         cst_NODECAST(node, ProcStmt)->params = params;
         cst_NODECAST(node, ProcStmt)->n_params = n_params;
         cst_NODECAST(node, ProcStmt)->body = b;

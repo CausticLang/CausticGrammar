@@ -9,8 +9,8 @@ block_inner <-
     {
         cap_ps_push(auxil);
         auxil->stack->mark = BLOCK;
-        auxil->stack->data = cst_binit_Block(malloc(sizeof(cst_Node)), cst_ninit_Block(malloc(sizeof(cst_nBlock))), $0s, 0, cap_lno(auxil), cap_cno(auxil, $0s));
-        _cap_ADDNODE(auxil->stack->data);
+        auxil->stack->data = cst_binit_Block((cst_Node*)malloc(sizeof(cst_Node)), cst_ninit_Block((cst_nBlock*)malloc(sizeof(cst_nBlock))), $0s, 0, cap_lno(auxil), cap_cno(auxil, $0s));
+        _cap_ADDNODE((cst_Node*)auxil->stack->data);
         $$ = _cap_LASTNODE;
     }
     ( line_inner _ )*

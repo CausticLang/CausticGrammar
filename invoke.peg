@@ -12,7 +12,7 @@ invoke <-
             assert(auxil->stack != NULL);
             assert(auxil->stack->mark == INVOKE_ARGS);
             cst_NODECAST(node, Invokation)->n_args = auxil->stack->auxcount;
-            cst_NODECAST(node, Invokation)->args = cap_ps_pop(auxil);
+            cst_NODECAST(node, Invokation)->args = (cst_index*)cap_ps_pop(auxil);
         }
         _cap_ADDNODE(node);
         $$ = _cap_LASTNODE;
@@ -34,7 +34,7 @@ invokation_kwarg <-
     k:expression _ '=' _ v:expression ~ { _cap_ERROR("invokation_kwarg", "Expected expression after '='"); } {
         assert(auxil->stack->mark == INVOKE_KWARGS);
         auxil->stack->data = realloc(auxil->stack->data, sizeof(cst_ProcKwarg*) * ++auxil->stack->auxcount);
-        cst_ProcKwarg* kw = malloc(sizeof(cst_ProcKwarg*));
+        cst_ProcKwarg* kw = (cst_ProcKwarg*)malloc(sizeof(cst_ProcKwarg*));
         kw->key = k; kw->val = v;
         ((cst_ProcKwarg**)auxil->stack->data)[auxil->stack->auxcount-1] = kw;
     }

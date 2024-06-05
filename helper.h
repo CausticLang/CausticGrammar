@@ -3,19 +3,19 @@
 #define _cap_PCC0e _0e
 
 #define _cap_COPYSTR(frm) \
-    strcpy(malloc(((strlen(frm) + 1) * sizeof(char))), frm)
+    strcpy((char*)malloc(((strlen(frm) + 1) * sizeof(char))), frm)
 #define _cap_ERROR(rname, msg) \
     cap_error(auxil, __pcc_ctx, rname, msg, _cap_PCC0s, _cap_PCC0e)
 
 #define _cap_MKNODE(type) \
     (cst_n##type*)malloc(sizeof(cst_n##type))
 #define _cap_MKINITNODE(type, ...) \
-    cst_binit_##type(malloc(sizeof(cst_Node)), cst_ninit_##type(_cap_MKNODE(type), __VA_ARGS__), _cap_PCC0s, _cap_PCC0e, cap_lno(auxil), cap_cno(auxil, _cap_PCC0s))
+    cst_binit_##type((cst_Node*)malloc(sizeof(cst_Node)), cst_ninit_##type(_cap_MKNODE(type), __VA_ARGS__), _cap_PCC0s, _cap_PCC0e, cap_lno(auxil), cap_cno(auxil, _cap_PCC0s))
 
 #define _cap_ADDPARAM(ptype, type_, name_, val_) \
     do { \
         assert(auxil->stack->mark == PROC_PARAMS); \
-        cst_ProcParam* param = malloc(sizeof(cst_ProcParam)); \
+        cst_ProcParam* param = (cst_ProcParam*)malloc(sizeof(cst_ProcParam)); \
         *param = (cst_ProcParam)CST__PROCEDURES__PROC_PARAM__INIT; \
         param->type = type_; \
         param->name = name_; \
