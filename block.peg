@@ -1,8 +1,9 @@
 EOL <- ';'
 
 block <-
+    ( a:identifier _ ':' _ )?
     '{'
-    _ i:block_inner { $$ = i; } _
+    _ i:block_inner { cst_NODECAST(auxil->root->nodes[i], Block)->arena = a; $$ = i; } _
     '}' ~ { _cap_ERROR("block", "Expected closing '}' after block"); }
 
 block_inner <-
